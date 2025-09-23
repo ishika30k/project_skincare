@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      /* 🔹 Change background here */
+      background: url('/static/images/glowpath.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', sans-serif;
+      color: #222;
+      padding-top: 80px; /* space for fixed navbar */
+    }
+
+    /* 🔹 Navbar black */
+    .navbar {
+      background-color: #000 !important;
+    }
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+    }
+    .nav-link:hover {
+      color: #ffb6c1 !important; /* lighter pink on hover */
+    }
+
+    .privacy-wrapper {
+      background: rgba(255, 255, 255, 0.1); /* white box with transparency */
+      padding: 40px;
+      border-radius: 12px;
+      max-width: 900px;
+      margin: auto;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    h1, h2 {
+      font-weight: 600;
+      color: #111;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- 🔹 Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">🌿 GlowPath</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about_us">About Us</a>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🔹 Privacy content -->
+  <div class="privacy-wrapper mt-5">
+    <h1>Privacy Policy</h1>
+    <p>Your privacy is very important to us. This page explains how GlowPath collects, uses, and protects your information.</p>
+
+    <h2>Information We Collect</h2>
+    <p>We may collect personal details such as your name, email, and skincare preferences to provide better recommendations.</p>
+
+    <h2>How We Use Your Information</h2>
+    <p>We only use your information to personalize your skincare journey and never share it with third parties without your consent.</p>
+
+    <h2>Your Choices</h2>
+    <p>You can update or delete your data anytime by visiting your profile settings.</p>
+
+    <h2>Contact Us</h2>
+    <p>If you have any privacy concerns, feel free to write us at  <u> glowpath@gmail.com</u>.</p>
+
+    <footer>© <span id="year"></span> GlowPath. All rights reserved.</footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Auto year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ingredients Library</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: #ffe5ec; /* light pink */
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: #000 !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      padding: 0.5rem 2rem;
+    }
+    .navbar .navbar-brand {
+      color: #fff !important;
+      font-weight: 600;
+      margin-right: 50rem;
+    }
+    .navbar .navbar-nav {
+      margin-left: auto;
+    }
+    .navbar .nav-link {
+      color: #fff !important;
+      font-weight: 500;
+      margin-left: 1rem;
+    }
+
+    .page-wrap {
+      flex: 1;
+      padding: 40px 16px 48px;
+    }
+
+    .page-title {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 700;
+      color: #222;
+    }
+    .page-subtitle {
+      text-align: center;
+      color: #444;
+      margin-bottom: 30px;
+    }
+
+    .chips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 18px;
+      max-width: 1100px;
+      margin: 0 auto 40px;
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(0,0,0,0.1);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      text-align: center;
+      font-weight: 600;
+      color: #222;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .footer-space { height: 20px; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">🌿 GlowPath</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href='/login_home'>Home</a></li>
+          <li class="nav-item"><a class="nav-link" href='/about_us'>About Us</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="settingsDropdown" role="button" data-bs-toggle="dropdown">
+              Settings
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href='/profile'>Profile</a></li>
+              <li><a class="dropdown-item" href="/account">Account Settings</a></li>
+              <li><a class="dropdown-item" href='/'>Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="page-wrap">
+    <h1 class="page-title">Some ingredients that are good for everyone</h1>
+    <p class="page-subtitle">Universal skincare heroes that work for most skin types.</p>
+
+    <div class="chips-grid">
+      <div class="chip">Niacinamide</div>
+      <div class="chip">Hyaluronic Acid</div>
+      <div class="chip">Vitamin C</div>
+      <div class="chip">Panthenol</div>
+      <div class="chip">Allantoin</div>
+      <div class="chip">Ceramides</div>
+      <div class="chip">Peptides</div>
+      <div class="chip">Centella Asiatica</div>
+      <div class="chip">Aloe Vera</div>
+      <div class="chip">Green Tea</div>
+      <div class="chip">Oat Extract</div>
+      <div class="chip">Squalane</div>
+      <div class="chip">Shea Butter</div>
+      <div class="chip">Jojoba Oil</div>
+      <div class="chip">Rosehip Oil</div>
+      <div class="chip">Licorice Root</div>
+      <div class="chip">Ferulic Acid</div>
+      <div class="chip">Caffeine</div>
+      <div class="chip">Polyglutamic Acid</div>
+      <div class="chip">Sodium Hyaluronate</div>
+      <div class="chip">Mandelic Acid</div>
+      <div class="chip">Zinc PCA</div>
+      <div class="chip">Argan Oil</div>
+      <div class="chip">Avocado Oil</div>
+      <div class="chip">Chamomile </div>
+      <div class="chip">Vitamin E</div>
+      <div class="chip">Beta Glucan</div>
+      <div class="chip">Sea Buckthorn Oil</div>
+      <div class="chip">Calendula </div>
+      <div class="chip">Glycerin</div>
+    </div>
+
+    <h1 class="page-title">Ingredients people should avoid</h1>
+    <p class="page-subtitle">Harsh or irritating ingredients best skipped in skincare.</p>
+
+    <div class="chips-grid">
+      <div class="chip">Sulfates (SLS, SLES)</div>
+      <div class="chip">Parabens</div>
+      <div class="chip">Formaldehyde</div>
+      <div class="chip">Phthalates</div>
+      <div class="chip">Synthetic Fragrances</div>
+      <div class="chip">Mineral Oil</div>
+      <div class="chip">Alcohol (Denat.)</div>
+      <div class="chip">Triclosan</div>
+      <div class="chip">Oxybenzone</div>
+      <div class="chip">Octinoxate</div>
+      <div class="chip">BHA</div>
+      <div class="chip">BHT 
+      </div>
+      <div class="chip">Toluene</div>
+      <div class="chip">PEGs </div>
+      <div class="chip">Aluminum Compounds</div>
+      <div class="chip">Silicones (Heavy)</div>
+      <div class="chip">Petrolatum</div>
+      <div class="chip">Artificial Dyes</div>
+    </div>
+
+    <div class="footer-space"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
