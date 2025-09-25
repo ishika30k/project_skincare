@@ -1,17 +1,16 @@
 import pytest
-from app import create_app
+import sys, os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from app import app as flask_app   # import the real Flask app
 
 @pytest.fixture()
 def app():
-    app.config.update({
+    flask_app.config.update({
         "TESTING": True,
     })
-
-    # other setup can go here
-
-    yield app
-
-    # clean up / reset resources here
+    yield flask_app
 
 
 @pytest.fixture()
