@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, session, redirect, flash
+from flask import Flask, render_template, request, url_for, session, redirect, flash, make_response
 from flask_mysqldb import MySQL
 from datetime import datetime
 import re
@@ -313,6 +313,11 @@ def search_hub():
 def about_us():
     return render_template('about_us.html')
 
+@app.route('/about_us_logout', methods=['GET'])
+def about_us_logout():
+    return render_template('about_us1.html')
+
+
 @app.route('/current_recommendations', methods=['GET'])
 def current_recommendation():
     cur = mysql.connection.cursor()
@@ -529,7 +534,12 @@ def privacy():
 def logout():
     session.clear()
     flash("You have been logged out.", "info")
-    return redirect(url_for('login_submit'))
+    response = make_response(redirect(url_for('login')))
+    response.headers['Cache-Control'] = 'no-cache, no_store, must_revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
+    #return redirect(url_for('login_submit'))
 
 if __name__ == "__main__":
     app.run(debug=True)
