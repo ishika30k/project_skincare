@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, url_for, session, redirect, f
 from flask_mysqldb import MySQL
 from datetime import datetime
 import re
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key_here"
@@ -32,16 +34,18 @@ def login_submit():
 
         cursor = mysql.connection.cursor()
         cursor.execute("""
-            SELECT User_id, User_name, gender FROM UserInfo 
-            WHERE User_name = %s AND password = %s
-        """, (username, password))
+            SELECT User_id, User_name, password, gender 
+            FROM UserInfo 
+            WHERE User_name = %s
+        """, (username,))
         user = cursor.fetchone()
         cursor.close()
 
-        if user:
+        if user and check_password_hash(user[2], password):
+            # login success
             session['user_id'] = user[0]
             session['user_name'] = user[1]
-            session['gender'] = user[2]
+            session['gender'] = user[3]
             flash("Login successful!", "success")
             return redirect(url_for('skin_info'))
         else:
@@ -103,10 +107,12 @@ def signin():
             return render_template("signin.html", username=username, name=name, email=email, phone=phone, age=age, gender=gender)
 
         # Insert into DB
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256', salt_length=16)
+
         cur.execute("""
             INSERT INTO UserInfo (User_name, name, Email, Phone_number, password, gender, age, created_at)
             VALUES (%s, %s, %s, %s, %s, %s, %s, NOW())
-        """, (username, name, email, phone, password, gender, age))
+        """, (username, name, email, phone, hashed_password, gender, age))
         mysql.connection.commit()
         cur.close()
 
@@ -530,16 +536,32 @@ def privacy():
     return render_template('privacy.html')
 
 
+# @app.route('/logout')
+# def logout():
+#     session.clear()
+#     flash("You have been logged out.", "info")
+#     response = make_response(redirect(url_for('login_submit')))
+#     response.headers['Cache-Control'] = 'no-cache, no_store, must_revalidate'
+#     response.headers['Pragma'] = 'no-cache'
+#     response.headers['Expires'] = '0'
+#     return response
+#     #return redirect(url_for('login_submit'))
+
 @app.route('/logout')
 def logout():
-    session.clear()
+    # Remove only login-related session keys
+    session.pop('user_id', None)
+    session.pop('user_name', None)
+    session.pop('gender', None)
+
     flash("You have been logged out.", "info")
-    response = make_response(redirect(url_for('login')))
-    response.headers['Cache-Control'] = 'no-cache, no_store, must_revalidate'
+
+    # Redirect to login with headers to prevent caching
+    response = make_response(redirect(url_for('login_submit')))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     return response
-    #return redirect(url_for('login_submit'))
 
 if __name__ == "__main__":
     app.run(debug=True)

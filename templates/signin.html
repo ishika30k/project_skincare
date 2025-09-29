@@ -11,7 +11,6 @@
       background-size: cover;
       font-family: 'Segoe UI', sans-serif;
     }
-
     body::before {
       content: "";
       position: fixed;
@@ -19,35 +18,28 @@
       background: rgba(255, 255, 255, 0);
       z-index: -1;
     }
-
     .navbar {
       background-color: #000000 !important;
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
       padding: 12px 8%;
     }
-
     .navbar-brand {
       font-weight: bold;
       font-size: 1.3rem;
       color: #ffffff !important;
     }
-
     .nav-link, .dropdown-toggle {
       color: #ffffff !important;
     }
-
     .nav-link:hover, .dropdown-item:hover {
       color: #dcdcdc !important;
     }
-
     .dropdown-menu {
       background-color: #000000;
     }
-
     .dropdown-item {
       color: #ffffff !important;
     }
-
     .signup-card {
       max-width: 500px;
       margin: auto;
@@ -58,21 +50,17 @@
       padding: 30px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     }
-
     .btn-primary {
       background-color: #6c63ff;
       border: none;
     }
-
     .btn-primary:hover {
       background-color: #5850d6;
     }
-
     a {
       color: #6c63ff;
       text-decoration: none;
     }
-
     a:hover {
       text-decoration: underline;
     }
@@ -103,31 +91,27 @@
   <!-- Signup Form -->
   <div class="signup-card">
     <h2 class="text-center mb-4">Create Your Account ✨</h2>
-    <form method="POST" action="{{ url_for('signin') }}">
+    <form id="signinForm" method="POST" action="{{ url_for('signin') }}">
 
+      <!-- Flash messages -->
       {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
+        <div id="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        </div>
       {% endif %}
-    {% endwith %}
-      
+      {% endwith %}
+
       <!-- Username field -->
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
-        <input 
-          type="text" 
-          class="form-control" 
-          id="username" 
-          name="username" 
-          required 
-          pattern="^[a-zA-Z0-9_]{3,16}$" 
-          title="3–16 characters: letters, numbers, and underscores only." 
-        />
+        <input type="text" class="form-control" id="username" name="username" required 
+               pattern="^[a-zA-Z0-9_]{3,16}$" title="3–16 characters: letters, numbers, and underscores only." />
       </div>
 
       <div class="mb-3">
@@ -137,31 +121,18 @@
 
       <div class="mb-3">
         <label for="email" class="form-label">Email Address</label>
-        <input 
-          type="email" 
-          class="form-control" 
-          id="email" 
-          name="email" 
-          required 
-          pattern="^(?!.*\.\.)(?!\.)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[A-Za-z]{2,}$"
-          title="Enter a valid email (e.g., name@example.com)" 
-        />
+        <input type="email" class="form-control" id="email" name="email" required
+               pattern="^(?!.*\.\.)(?!\.)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[A-Za-z]{2,}$"
+               title="Enter a valid email (e.g., name@example.com)" />
       </div>
 
       <div class="mb-3">
         <label for="phone" class="form-label">Phone Number</label>
-        <input 
-          type="tel" 
-          class="form-control" 
-          id="phone" 
-          name="phone" 
-          required 
-          maxlength="10"
-          pattern="(?!([0-9])\1{9})([6-9]\d{9})"
-          title="Enter a valid 10-digit Indian phone number starting with 6–9" 
-        />
+        <input type="tel" class="form-control" id="phone" name="phone" required maxlength="10"
+               pattern="(?!([0-9])\1{9})([6-9]\d{9})"
+               title="Enter a valid 10-digit Indian phone number starting with 6–9" />
         <span id="phoneMsg"></span>
-    </div>
+      </div>
 
       <div class="mb-3">
         <label for="age" class="form-label">Age</label>
@@ -181,15 +152,8 @@
 
       <div class="mb-3">
         <label for="password" class="form-label">Create Password</label>
-        <input 
-          type="password" 
-          class="form-control" 
-          id="password" 
-          name="password" 
-          required 
-          pattern="^(?=.*[A-Z]).{8,}$"
-          title="Password must be at least 8 characters with uppercase." 
-        />
+        <input type="password" class="form-control" id="password" name="password" required
+               pattern="^(?=.*[A-Z]).{8,}$" title="Password must be at least 8 characters with uppercase." />
       </div>
 
       <div class="d-grid">
@@ -205,82 +169,64 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-        const form = document.getElementById("signinForm");
+    const form = document.getElementById("signinForm");
+    const emailInput = document.getElementById("email");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const phoneInput = document.getElementById("phone");
+    const emailMsg = document.getElementById("emailMsg");
+    const usernameMsg = document.getElementById("usernameMsg");
+    const passwordMsg = document.getElementById("passwordMsg");
+    const phoneMsg = document.getElementById("phoneMsg");
 
-        const emailInput = document.getElementById("email");
-        const usernameInput = document.getElementById("username");
-        const passwordInput = document.getElementById("password");
+    // Regex rules
+    const emailRegex = /^(?!.*\.\.)(?!\.)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[A-Za-z]{2,}$/;
+    const usernameRegex = /^[a-zA-Z0-9]{3,15}$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+    const phoneRegex = /^[0-9]{10}$/;
 
-        const emailMsg = document.getElementById("emailMsg");
-        const usernameMsg = document.getElementById("usernameMsg");
-        const passwordMsg = document.getElementById("passwordMsg");
+    // Input events
+    emailInput.addEventListener("input", () => {
+      emailMsg.textContent = emailRegex.test(emailInput.value) ? "✅ Valid email" : "❌ Invalid email";
+      emailMsg.style.color = emailRegex.test(emailInput.value) ? "green" : "red";
+    });
 
-        // Regex rules
-        const emailRegex = /^(?!.*\.\.)(?!\.)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[A-Za-z]{2,}$/;
-        const usernameRegex = /^[a-zA-Z0-9]{3,15}$/; // letters/numbers, 3-15 chars
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/; // min 6 chars, 1 letter & 1 number
+    usernameInput.addEventListener("input", () => {
+      usernameMsg.textContent = usernameRegex.test(usernameInput.value) ? "✅ Valid username" : "❌ 3-15 letters/numbers only";
+      usernameMsg.style.color = usernameRegex.test(usernameInput.value) ? "green" : "red";
+    });
 
-        // Dynamic checks
-        emailInput.addEventListener("input", () => {
-            if (emailRegex.test(emailInput.value)) {
-                emailMsg.textContent = "✅ Valid email";
-                emailMsg.style.color = "green";
-            } else {
-                emailMsg.textContent = "❌ Invalid email";
-                emailMsg.style.color = "red";
-            }
+    passwordInput.addEventListener("input", () => {
+      passwordMsg.textContent = passwordRegex.test(passwordInput.value) ? "✅ Strong password" : "❌ Min 6 chars, 1 letter & 1 number";
+      passwordMsg.style.color = passwordRegex.test(passwordInput.value) ? "green" : "red";
+    });
+
+    phoneInput.addEventListener("input", () => {
+      phoneMsg.textContent = phoneRegex.test(phoneInput.value) ? "✅ Valid phone" : "❌ Must be 10 digits";
+      phoneMsg.style.color = phoneRegex.test(phoneInput.value) ? "green" : "red";
+    });
+
+    // Prevent submit if invalid
+    form.addEventListener("submit", (e) => {
+      if (!emailRegex.test(emailInput.value) || !usernameRegex.test(usernameInput.value) ||
+          !passwordRegex.test(passwordInput.value) || !phoneRegex.test(phoneInput.value)) {
+        e.preventDefault();
+        alert("Please fix errors before submitting!");
+      }
+    });
+
+    // Flash messages auto fade
+    setTimeout(function() {
+      const flashContainer = document.getElementById('flash-messages');
+      if (flashContainer) {
+        const alerts = flashContainer.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+          alert.classList.remove('show'); // triggers Bootstrap fade
+          setTimeout(() => alert.remove(), 1000); // remove after fade completes
         });
+      }
+    }, 5000);
+  </script>
 
-        usernameInput.addEventListener("input", () => {
-            if (usernameRegex.test(usernameInput.value)) {
-                usernameMsg.textContent = "✅ Valid username";
-                usernameMsg.style.color = "green";
-            } else {
-                usernameMsg.textContent = "❌ 3-15 letters/numbers only";
-                usernameMsg.style.color = "red";
-            }
-        });
-
-        passwordInput.addEventListener("input", () => {
-            if (passwordRegex.test(passwordInput.value)) {
-                passwordMsg.textContent = "✅ Strong password";
-                passwordMsg.style.color = "green";
-            } else {
-                passwordMsg.textContent = "❌ Min 6 chars, 1 letter & 1 number";
-                passwordMsg.style.color = "red";
-            }
-        });
-
-        const phoneInput = document.getElementById("phone");
-        const phoneMsg = document.getElementById("phoneMsg");
-
-        const phoneRegex = /^[0-9]{10}$/; // exactly 10 digits
-
-        phoneInput.addEventListener("input", () => {
-            if (phoneRegex.test(phoneInput.value)) {
-                phoneMsg.textContent = "✅ Valid phone";
-                phoneMsg.style.color = "green";
-            } else {
-                phoneMsg.textContent = "❌ Must be 10 digits";
-                phoneMsg.style.color = "red";
-            }
-        });
-
-
-        // Optional: prevent submit if invalid
-        form.addEventListener("submit", (e) => {
-            if (
-                !emailRegex.test(emailInput.value) ||
-                !usernameRegex.test(usernameInput.value) ||
-                !passwordRegex.test(passwordInput.value) ||
-                !phoneRegex.test(phoneInput.value)
-            ) {
-                e.preventDefault(); // stop form submit
-                alert("Please fix errors before submitting!");
-            }
-        });
-
-    </script>
-  
 </body>
 </html>
