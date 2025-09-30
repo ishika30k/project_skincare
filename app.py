@@ -19,7 +19,7 @@ mysql = MySQL(app)
 
 @app.route('/')
 def main_page():
-    return render_template('project_skincare.html')  # main page
+    return render_template('project_skincare.html')  
 
 @app.route('/login_home')
 def login_home():
@@ -90,7 +90,6 @@ def signin():
             flash("Weak password! Must be 8+ chars, include uppercase.", "danger")
             return render_template("signin.html", username=username, name=name, email=email, phone=phone, age=age, gender=gender)
 
-        # Uniqueness checks
         cur.execute("SELECT 1 FROM UserInfo WHERE Email = %s", (email,))
         if cur.fetchone():
             flash("This email is already registered. Please use another one.", "danger")
@@ -172,7 +171,6 @@ def submit_skin_info():
     mysql.connection.commit()
     cursor.close()
 
-    flash(f"Quiz submitted! You have taken {total_quiz} quiz(es).", "success")
     return redirect(url_for("show_suggestions"))
 
 @app.route("/recommendations")
