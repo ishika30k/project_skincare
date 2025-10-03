@@ -3,6 +3,7 @@ from flask_mysqldb import MySQL
 from datetime import datetime
 import re
 from werkzeug.security import generate_password_hash, check_password_hash
+import json
 
 
 app = Flask(__name__)
@@ -139,15 +140,13 @@ def submit_skin_info():
         flash("Please login first!", "warning")
         return redirect(url_for('login_submit'))
 
-    Skin_type = request.form.get('skin_type')
-    Concern = request.form.get('concern')
-    Goal = request.form.get('goal')
-    Pregnant = request.form.get('pregnant')
+    skin_type = request.form.get('skin_type')
+    concern = request.form.get('concern')
     user_id = session['user_id']
 
     cursor = mysql.connection.cursor()
 
-    # Check if user has previous quiz entries
+    # Count previous quizzes
     cursor.execute("""
         SELECT Total_num_of_Quiz_taken FROM User_Skin_Info
         WHERE User_id = %s
@@ -155,23 +154,20 @@ def submit_skin_info():
         LIMIT 1
     """, (user_id,))
     last_entry = cursor.fetchone()
+    total_quiz = last_entry[0] + 1 if last_entry else 1
 
-    if last_entry:
-        total_quiz = last_entry[0] + 1
-    else:
-        total_quiz = 1
-
-    # Insert new quiz entry with incremented counter
+    # Insert new entry
     cursor.execute("""
         INSERT INTO User_Skin_Info 
-        (User_id, Skin_type, Concern, Goal, Pregnant, Last_updated_at, Total_num_of_Quiz_taken)
-        VALUES (%s, %s, %s, %s, %s, NOW(), %s)
-    """, (user_id, Skin_type, Concern, Goal, Pregnant, total_quiz))
+        (User_id, Skin_type, Concern, Last_updated_at, Total_num_of_Quiz_taken)
+        VALUES (%s, %s, %s, NOW(), %s)
+    """, (user_id, skin_type, concern, total_quiz))
 
     mysql.connection.commit()
     cursor.close()
 
     return redirect(url_for("show_suggestions"))
+
 
 @app.route("/recommendations")
 def recommendations():
@@ -182,9 +178,9 @@ def recommendations():
     user_id = session["user_id"]
     cur = mysql.connection.cursor()
 
-    # Get user's latest quiz result including skin goal
+    # Get user's latest quiz result
     cur.execute("""
-        SELECT Skin_type, Concern, Goal
+        SELECT Skin_type, Concern
         FROM User_Skin_Info 
         WHERE User_id = %s 
         ORDER BY Last_updated_at DESC 
@@ -196,45 +192,43 @@ def recommendations():
         flash("Please complete the skin quiz first.", "warning")
         return redirect(url_for("quiz"))
 
-    skin_type = user_skin[0]
-    concern = user_skin[1]
-    skin_goal = user_skin[2]  # fetch skin goal
+    skin_type = user_skin[0].strip()
+    concern = user_skin[1].strip()
 
-    # Fetch products (tuple-based)
-    cur.execute("""
-        SELECT Brand_name, Product_name, Price, Discount, ingredients, benefits
-        FROM product_info
-        WHERE LOWER(skin_type) = %s AND LOWER(concern) = %s
-        LIMIT 6
-    """, (skin_type.lower(), concern.lower()))
-    products = cur.fetchall()
-
-    # Fetch diet (tuple-based) with skin goal
+    # Fetch all diet info for that skin_type + concern
     cur.execute("""
         SELECT recommendations, to_avoid
         FROM diet_info
-        WHERE LOWER(skin_type) = %s 
+        WHERE LOWER(skin_type) = %s
           AND LOWER(concern) = %s
-          AND LOWER(skin_goal) = %s
-    """, (skin_type.lower(), concern.lower(), skin_goal.lower()))
-    diet = cur.fetchall()
+    """, (skin_type.lower(), concern.lower()))
+    diet_rows = cur.fetchall()
+
+    diet = []
+    for row in diet_rows:
+        diet.append({
+            "recommendations": [r.strip() for r in row[0].split(",")] if row[0] else [],
+            "to_avoid": [a.strip() for a in row[1].split(",")] if row[1] else []
+        })
+
+    # 🔹 Fetch image for this skin type from SkinInfo
+    cur.execute("""
+        SELECT image_url 
+        FROM SkinInfo 
+        WHERE LOWER(skin_type) = %s
+        LIMIT 1
+    """, (skin_type.lower(),))
+    image_row = cur.fetchone()
+    image_url = image_row[0] if image_row else None
 
     cur.close()
 
-    # Debugging (optional)
-    print("Skin Type:", skin_type)
-    print("Concern:", concern)
-    print("Skin Goal:", skin_goal)
-    print("Products:", products)
-    print("Diet:", diet)
-
     return render_template(
         "product.html",
-        products=products,
         diet=diet,
         skin_type=skin_type,
         concern=concern,
-        skin_goal=skin_goal
+        image_url=image_url  # 🔹 send to template
     )
 
 @app.route("/show_suggestions")
@@ -246,9 +240,9 @@ def show_suggestions():
     user_id = session['user_id']
     cur = mysql.connection.cursor()
 
-    # Get latest quiz for current user
+    # Get latest quiz
     cur.execute("""
-        SELECT Skin_type, Concern, Goal, Pregnant
+        SELECT Skin_type, Concern
         FROM User_Skin_Info
         WHERE User_id = %s
         ORDER BY ID DESC
@@ -257,39 +251,40 @@ def show_suggestions():
     user_row = cur.fetchone()
 
     if not user_row:
-        return render_template("show_suggestions.html",
-                               skin_type=None, concern=None, goal=None, pregnant=None,
-                               recommended_ingredients=[], avoid_ingredients=[])
+        return render_template("suggestions.html",
+                               skin_type=None, concern=None,
+                               am_routine=None, pm_routine=None, description=None)
 
-    skin_type, concern, goal, pregnant = user_row
+    skin_type, concern = user_row
 
-    # Get recommendations from SkinInfo
+    # Fetch routines from SkinInfo
     cur.execute("""
-    SELECT recommendation, to_avoid
-    FROM SkinInfo
-    WHERE LOWER(skin_type) = LOWER(%s)
-      AND LOWER(concern) = LOWER(%s)
-      AND LOWER(skin_goal) = LOWER(%s)
-    LIMIT 1
-""", (skin_type, concern, goal))
+        SELECT description, am_routine, pm_routine,image_url
+        FROM SkinInfo
+        WHERE LOWER(skin_type) = LOWER(%s)
+          AND LOWER(concern) = LOWER(%s)
+        LIMIT 1
+    """, (skin_type, concern))
 
-    rec_row = cur.fetchone()
+    info = cur.fetchone()
     cur.close()
 
-    if rec_row:
-        recommendation, to_avoid = rec_row
-        recommended_ingredients = [r.strip() for r in recommendation.split(",")]
-        avoid_ingredients = [a.strip() for a in to_avoid.split(",")]
+    if info:
+        description, am_routine_json, pm_routine_json,image_url = info
+
+        # Parse JSON strings to dicts
+        am_routine = json.loads(am_routine_json)
+        pm_routine = json.loads(pm_routine_json)
     else:
-        recommended_ingredients, avoid_ingredients = [], []
+        description = am_routine = pm_routine = None
 
     return render_template("suggestions.html",
                            skin_type=skin_type,
                            concern=concern,
-                           goal=goal,
-                           pregnant=pregnant,
-                           recommended_ingredients=recommended_ingredients,
-                           avoid_ingredients=avoid_ingredients)
+                           description=description,
+                           am_routine=am_routine,
+                           pm_routine=pm_routine,
+                           image_url=image_url)
 
 
 @app.route("/search_hub", methods=["GET", "POST"])
@@ -336,7 +331,7 @@ def current_recommendation():
 
     # Get last quiz entry
     cur.execute("""
-        SELECT Skin_type, Concern, Goal, Pregnant
+        SELECT Skin_type, Concern
         FROM User_Skin_Info
         WHERE user_id = %s
         ORDER BY ID DESC
@@ -346,36 +341,36 @@ def current_recommendation():
     last_entry = cur.fetchone()
 
     if last_entry:
-        skin_type, concern, goal, pregnant = last_entry
+        skin_type, concern = last_entry
 
-        # Get recommendations from SkinInfo
+        # Get skincare routines from SkinInfo
         cur.execute("""
-            SELECT recommendation, to_avoid
+            SELECT am_routine, pm_routine
             FROM SkinInfo
             WHERE LOWER(skin_type) = LOWER(%s)
               AND LOWER(concern) = LOWER(%s)
             LIMIT 1
         """, (skin_type, concern))
         
-        rec = cur.fetchone()
+        routines = cur.fetchone()
         cur.close()
 
-        if rec:
-            recommended_ingredients = rec[0].split(", ")
-            avoid_ingredients = rec[1].split(", ")
+        if routines:
+            import ast
+            # Convert stringified dicts back to Python dicts
+            am_routine = ast.literal_eval(routines[0])
+            pm_routine = ast.literal_eval(routines[1])
         else:
-            recommended_ingredients = []
-            avoid_ingredients = []
+            am_routine = {}
+            pm_routine = {}
 
         return render_template(
             'suggestions.html',
             skin_type=skin_type,
             concern=concern,
-            goal=goal,
-            pregnant=pregnant,
             gender=gender,
-            recommended_ingredients=recommended_ingredients,
-            avoid_ingredients=avoid_ingredients
+            am_routine=am_routine,
+            pm_routine=pm_routine
         )
     else:
         cur.close()
@@ -383,11 +378,9 @@ def current_recommendation():
             'suggestions.html',
             skin_type=None,
             concern=None,
-            goal=None,
-            pregnant=None,
             gender=gender,
-            recommended_ingredients=[],
-            avoid_ingredients=[]
+            am_routine={},
+            pm_routine={}
         )
 
 
@@ -417,7 +410,7 @@ def profile_page():
 
     # Get user's latest skin info from User_Skin_Info
     cur.execute("""
-        SELECT Skin_type, Concern, Goal, Pregnant
+        SELECT Skin_type, Concern
         FROM User_Skin_Info
         WHERE User_id = %s
         ORDER BY Last_updated_at DESC
@@ -435,10 +428,8 @@ def profile_page():
                            age=user_info[4] if user_info else "",
                            gender=user_info[5] if user_info else "",
                            skin_type=skin_info[0] if skin_info else "",
-                           concern=skin_info[1] if skin_info else "",
-                           goal=skin_info[2] if skin_info else "",
-                           pregnant=skin_info[3] if skin_info else "")
-
+                           concern=skin_info[1] if skin_info else "")
+""
 @app.route('/info_page', methods=['GET'])
 def info_page():
     return render_template('info.html')
