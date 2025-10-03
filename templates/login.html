@@ -89,16 +89,18 @@
     <h2 class="mb-4">Welcome 🌸</h2>
 
     <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+    <div id="flash-messages">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
 
     <form method="POST" action='/login'>
       <div class="mb-3 text-start">
@@ -121,5 +123,19 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Flash messages auto fade -->
+<script>
+  setTimeout(function() {
+    const flashContainer = document.getElementById('flash-messages');
+    if (flashContainer) {
+      const alerts = flashContainer.querySelectorAll('.alert');
+      alerts.forEach(alert => {
+        alert.classList.remove('show'); // triggers Bootstrap fade
+        setTimeout(() => alert.remove(), 1000); // remove after fade completes
+      });
+    }
+  }, 5000); // 5 seconds
+</script>
 </body>
 </html>
