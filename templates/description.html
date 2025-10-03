@@ -12,7 +12,7 @@
       font-family: Arial, sans-serif;
     }
     .content-box {
-      background: rgba(255, 255, 255, 0.1); /* 50% transparent */
+      background: rgba(255, 255, 255, 0.1); /* semi-transparent */
       padding: 40px;
       border-radius: 20px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.2);
@@ -30,35 +30,32 @@
       margin-bottom: 20px;
       line-height: 1.6;
     }
-  .content-box {
-    max-width: 900px;
-    margin: 40px auto;
-    background: rgba(255, 255, 255, 0.5); /* 50% transparent */
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
-  }
-
-  .heading {
-    text-align: center; /* center the main heading */
-    margin-bottom: 30px;
-    font-size: 2rem;
-    font-weight: bold;
-  }
-
-  .skin-type {
-    text-align: left; /* align skin type titles to left */
-    margin-top: 20px;
-    color: #333;
-    font-size: 1.5rem;
-  }
-
-  p {
-    text-align: justify;
-    font-size: 1.1rem;
-    line-height: 1.6;
-  }
-</style>
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.5); 
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+    }
+    .heading {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    .skin-type {
+      text-align: left;
+      margin-top: 20px;
+      color: #333;
+      font-size: 1.5rem;
+    }
+    p {
+      text-align: justify;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
 
@@ -83,7 +80,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li><a class="dropdown-item" href='/profile_page'>Profile</a></li>
-                            <li><a class="dropdown-item" href='/'>Logout</a></li>
+              <li><a class="dropdown-item" href='/'>Logout</a></li>
             </ul>
           </li>
         </ul>
@@ -91,44 +88,61 @@
     </div>
   </nav>
 
+  <!-- Content Box -->
+  <div class="content-box">
+    <h1 class="heading">Find Out Your Skin Type✨</h1>
+    
+    <h2 class="skin-type">Oily Skin:</h2> 
+    <p>
+      If your skin looks shiny in appearance, especially on the forehead, nose, and chin, and it tends 
+      to produce excess oil on its own, you likely have oily skin. You may also notice frequent 
+      breakouts and enlarged pores.
+    </p>
 
+    <h2 class="skin-type">Dry Skin:</h2> 
+    <p>
+      If your skin often feels tight, rough, or flaky, especially after washing, and struggles to stay 
+      moisturized on its own, you likely have dry skin. It may feel uncomfortable or sensitive during 
+      weather changes.
+    </p>
 
-<!-- Content Box -->
-<div class="content-box">
-  <h1 class="heading">Find Out Your Skin Type✨</h1>
-  
-  <h2 class="skin-type">Oily Skin:</h2> 
-  <p>
-    If your skin looks shiny in appearance, especially on the forehead, nose, and chin, and it tends 
-    to produce excess oil on its own, you likely have oily skin. You may also notice frequent 
-    breakouts and enlarged pores.
-  </p>
+    <h2 class="skin-type">Normal Skin:</h2> 
+    <p>
+      If your skin feels balanced — not too oily or too dry — and looks smooth with barely visible pores, 
+      you likely have normal skin. It rarely experiences breakouts or sensitivity, and usually feels 
+      comfortable year-round.
+    </p>
 
-  <h2 class="skin-type">Dry Skin:</h2> 
-  <p>
-    If your skin often feels tight, rough, or flaky, especially after washing, and struggles to stay 
-    moisturized on its own, you likely have dry skin. It may feel uncomfortable or sensitive during 
-    weather changes.
-  </p>
+    <h2 class="skin-type">Combination Skin:</h2> 
+    <p>
+      If your skin feels oily in certain areas (like your T-zone: forehead, nose, chin) but normal or dry 
+      in other areas (like your cheeks), you likely have combination skin. It is the most common skin type 
+      and requires a mixed care routine.
+    </p>
 
-  <h2 class="skin-type">Normal Skin:</h2> 
-  <p>
-    If your skin feels balanced — not too oily or too dry — and looks smooth with barely visible pores, 
-    you likely have normal skin. It rarely experiences breakouts or sensitivity, and usually feels 
-    comfortable year-round.
-  </p>
+    <h2 class="skin-type">Sensitive Skin:</h2> 
+    <p>
+      If your skin often reacts with redness, burning, stinging, or itching after using products or being 
+      exposed to environmental triggers, you likely have sensitive skin. It requires extra gentle care and 
+      fragrance-free products to maintain balance.
+    </p>
 
-  <h2 class="skin-type">Combination Skin:</h2> 
-  <p>
-    If your skin feels oily in certain areas (like your T-zone: forehead, nose, chin) but normal or dry 
-    in other areas (like your cheeks), you likely have combination skin. It is the most common skin type 
-    and requires a mixed care routine.
-  </p>
-</div>
+    <h2 class="skin-type">Men’s Skin:</h2> 
+    <p>
+      Men’s skin tends to be thicker, oilier, and more prone to enlarged pores due to higher sebum production. 
+      Regular shaving may also cause irritation, ingrown hairs, or sensitivity. A proper routine helps balance 
+      oil, soothe irritation, and protect the skin barrier.
+    </p>
+
+    <h2 class="skin-type">Aging Skin:</h2> 
+    <p>
+      As skin matures, it may lose elasticity and appear thinner, drier, or less radiant. Fine lines, wrinkles, 
+      dullness, and uneven tone become more visible. Aging skin needs hydrating, antioxidant-rich, and 
+      collagen-supporting care to maintain a healthy glow.
+    </p>
+
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-
-
