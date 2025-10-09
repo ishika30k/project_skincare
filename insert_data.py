@@ -383,7 +383,7 @@ db.commit()
 print("Data inserted successfully!")
 
 mycursor.close()
-db.close()'''
+db.close()
 
 mycursor.execute("CREATE TABLE diet_info(diet_id INT AUTO_INCREMENT PRIMARY KEY,skin_type VARCHAR(200), concern VARCHAR(200),skin_goal VARCHAR(100),recommendations VARCHAR(500), to_avoid VARCHAR(500))")
 
@@ -540,6 +540,501 @@ INSERT INTO diet_info (skin_type, concern, skin_goal, recommendations, to_avoid)
 db.commit()
 
 
+mycursor.execute("""
+CREATE TABLE IF NOT EXISTS SkinInfo (
+    skin_id INT AUTO_INCREMENT PRIMARY KEY,
+    skin_type VARCHAR(50),
+    concern VARCHAR(100),
+    description TEXT,
+    am_routine TEXT,
+    pm_routine TEXT
+)
+""")
 
 
 
+mycursor.execute("""
+INSERT INTO SkinInfo (skin_type, concern, description, am_routine, pm_routine)
+VALUES
+-- Oily + Acne
+('Oily', 'Acne',
+ 'Oily skin produces excess sebum, making it prone to breakouts and clogged pores. A targeted routine controls oil and reduces acne.',
+ '{"Cleanser": "CeraVe Foaming Facial Cleanser — Removes excess oil and impurities",
+   "Treatment": "The Ordinary Salicylic Acid 2% — Clears acne and unclogs pores",
+   "Moisturizer": "Neutrogena Hydro Boost Water Gel — Lightweight hydration",
+   "Sunscreen": "La Roche-Posay Anthelios SPF 50 — Broad-spectrum oil-free protection"}',
+ '{"Cleanser": "CeraVe Foaming Facial Cleanser — Deep cleanses without over-drying",
+   "Treatment": "Paula’s Choice 2% BHA Liquid Exfoliant — Prevents clogged pores",
+   "Moisturizer": "Neutrogena Hydro Boost Water Gel — Hydrates overnight"}'),
+
+-- Oily + Large Pores
+('Oily', 'Large Pores',
+ 'Oily skin often develops enlarged pores due to excess sebum and buildup. Niacinamide helps refine pores and balance skin.',
+ '{"Cleanser": "CeraVe Foaming Facial Cleanser — Controls excess oil",
+   "Treatment": "The Ordinary Niacinamide 10% + Zinc 1% — Minimizes pores",
+   "Moisturizer": "Plum Green Tea Oil-Free Moisturizer — Lightweight hydration",
+   "Sunscreen": "Minimalist Sunscreen SPF 50 — Oil-control formula"}',
+ '{"Cleanser": "CeraVe Foaming Facial Cleanser — Maintains balance",
+   "Treatment": "Retinol Serum (0.2–0.5%) — Smooths skin & reduces pore appearance",
+   "Moisturizer": "Plum Green Tea Oil-Free Moisturizer — Non-comedogenic hydration"}'),
+
+-- Oily + Oil Control
+('Oily', 'Oil Control',
+ 'Excess sebum makes oily skin shiny and prone to acne. A routine focusing on oil regulation, hydration, and gentle exfoliation keeps skin balanced.',
+ '{"Cleanser": "Kiehl’s Facial Fuel Oil Eliminator — Removes excess oil",
+   "Treatment": "Niacinamide 10% Serum — Regulates sebum production",
+   "Moisturizer": "Clinique Dramatically Different Oil-Free Gel — Lightweight hydration",
+   "Sunscreen": "Neutrogena Clear Face SPF 50 — Matte finish"}',
+ '{"Cleanser": "Kiehl’s Facial Fuel Oil Eliminator — Keeps skin fresh",
+   "Treatment": "The Ordinary Salicylic Acid 2% — Prevents breakouts",
+   "Moisturizer": "Clinique Dramatically Different Oil-Free Gel — Non-greasy hydration"}'),
+
+-- Oily + Uneven Texture
+('Oily', 'Uneven Texture',
+ 'Oily skin can develop rough texture due to excess oil and dead skin buildup. Exfoliation and lightweight hydration help smooth the skin.',
+ '{"Cleanser": "Cetaphil Oily Skin Cleanser — Gentle daily foaming wash",
+   "Treatment": "The Ordinary Glycolic Acid 7% Toning Solution — Exfoliates dead skin",
+   "Moisturizer": "Belif Aqua Bomb — Lightweight gel hydration",
+   "Sunscreen": "Biore UV Aqua Rich SPF 50 — Weightless UV protection"}',
+ '{"Cleanser": "Cetaphil Oily Skin Cleanser — Balances sebum",
+   "Treatment": "The Ordinary Retinol 0.2–0.5% — Refines uneven skin",
+   "Moisturizer": "Belif Aqua Bomb — Locks hydration overnight"}'),
+
+-- Oily + Dullness
+('Oily', 'Dullness',
+ 'Oily skin may appear lackluster despite shine, due to clogged pores and dead skin buildup. Brightening routines improve radiance.',
+ '{"Cleanser": "CeraVe Foaming Cleanser — Clears impurities",
+   "Treatment": "La Roche-Posay Pure Vitamin C10 Serum — Brightens dull skin",
+   "Moisturizer": "Olay Luminous Whip Moisturizer — Lightweight brightening hydration",
+   "Sunscreen": "Eucerin Sun Fluid SPF 50 — Prevents pigmentation"}',
+ '{"Cleanser": "CeraVe Foaming Cleanser — Preps skin for actives",
+   "Treatment": "The Ordinary AHA 7% Toning Solution — Gentle exfoliation & glow",
+   "Moisturizer": "Olay Luminous Whip Moisturizer — Improves radiance overnight"}'),
+
+-- Oily + Pigmentation
+('Oily', 'Pigmentation',
+ 'Oily skin with pigmentation needs targeted brightening and exfoliation while controlling excess oil.',
+ '{"Cleanser": "Simple Refreshing Facial Wash — Gentle oil-free cleanser",
+   "Treatment": "The Ordinary Alpha Arbutin 2% + HA — Reduces pigmentation",
+   "Moisturizer": "Neutrogena Hydro Boost Water Gel — Lightweight hydration",
+   "Sunscreen": "La Roche-Posay Anthelios UVMune 400 SPF 50+ — Prevents pigmentation"}',
+ '{"Cleanser": "Simple Refreshing Facial Wash — Maintains balance",
+   "Treatment": "The Ordinary Azelaic Acid 10% — Evens skin tone",
+   "Moisturizer": "Neutrogena Hydro Boost Water Gel — Hydration & repair"}')
+;
+""")
+
+mycursor.execute("""
+INSERT INTO SkinInfo (skin_type, concern, description, am_routine, pm_routine)
+VALUES
+-- Dry + Dehydration
+('Dry', 'Dehydration',
+ 'Dry skin lacks water content, making it prone to tightness and flakiness. Hydrating routines restore moisture and maintain skin barrier.',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Gentle, non-stripping",
+   "Treatment": "The Ordinary Hyaluronic Acid 2% + B5 — Deep hydration",
+   "Moisturizer": "Neutrogena Hydro Boost Cream — Locks in moisture",
+   "Sunscreen": "La Roche-Posay Anthelios Melt-in SPF 50 — Non-drying"}',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Maintains moisture",
+   "Treatment": "The Inkey List Hyaluronic Acid Serum — Overnight hydration",
+   "Moisturizer": "CeraVe Moisturizing Cream — Nourishes and repairs"}'),
+
+-- Dry + Sensitivity
+('Dry', 'Sensitivity',
+ 'Sensitive dry skin can react easily to products. Gentle and soothing routines reduce irritation and calm the skin.',
+ '{"Cleanser": "La Roche-Posay Toleriane Hydrating Gentle Cleanser — Minimal irritation",
+   "Treatment": "Avene Cicalfate Restorative Cream — Calms redness and inflammation",
+   "Moisturizer": "Belif Moisturizing Bomb — Soothes and hydrates",
+   "Sunscreen": "EltaMD UV Physical SPF 41 — Gentle mineral sunscreen"}',
+ '{"Cleanser": "La Roche-Posay Toleriane Cleanser — Keeps barrier intact",
+   "Treatment": "Dr. Jart Cicapair Tiger Grass Serum — Reduces sensitivity",
+   "Moisturizer": "Belif Moisturizing Bomb — Locks hydration overnight"}'),
+
+-- Dry + Aging
+('Dry', 'Aging',
+ 'Dry skin loses elasticity and may show fine lines. Anti-aging routines with hydration and antioxidants help maintain youthful skin.',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Gentle and nourishing",
+   "Treatment": "The Ordinary Buffet + Copper Peptides — Targets fine lines",
+   "Moisturizer": "Olay Regenerist Micro-Sculpting Cream — Anti-aging hydration",
+   "Sunscreen": "Neutrogena Hydro Boost SPF 50 — Protects from UV aging"}',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Prepares skin for night actives",
+   "Treatment": "Retinol 0.2–0.5% Serum — Reduces fine lines",
+   "Moisturizer": "Olay Regenerist Night Cream — Overnight repair"}'),
+
+-- Dry + Dullness
+('Dry', 'Dullness',
+ 'Dry skin can appear lifeless due to lack of moisture and dead cell buildup. Brightening and hydration restore radiance.',
+ '{"Cleanser": "Aveeno Positively Radiant Gentle Cleanser — Hydrating",
+   "Treatment": "Vitamin C Serum (La Roche-Posay Pure Vitamin C10) — Brightens skin",
+   "Moisturizer": "Clinique Moisture Surge — Lightweight hydration",
+   "Sunscreen": "Eucerin Sun Fluid SPF 50 — Protects and prevents dullness"}',
+ '{"Cleanser": "Aveeno Positively Radiant Cleanser — Removes impurities",
+   "Treatment": "The Ordinary AHA 7% Toning Solution — Gentle exfoliation for glow",
+   "Moisturizer": "Clinique Moisture Surge — Overnight radiance"}'),
+
+-- Dry + Barrier Repair
+('Dry', 'Barrier Repair',
+ 'Dry skin with a compromised barrier is prone to sensitivity, redness, and moisture loss. Routine strengthens and restores the barrier.',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Maintains natural lipids",
+   "Treatment": "La Roche-Posay Cicaplast Baume B5 — Repairs barrier",
+   "Moisturizer": "Vanicream Moisturizing Cream — Rich hydration",
+   "Sunscreen": "EltaMD UV Physical SPF 41 — Gentle protection"}',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Gentle evening wash",
+   "Treatment": "Avene Cicalfate Repair Cream — Supports skin recovery",
+   "Moisturizer": "Vanicream Moisturizing Cream — Nourishing overnight"}')
+;
+""")
+
+mycursor.execute("""
+INSERT INTO SkinInfo (skin_type, concern, description, am_routine, pm_routine)
+VALUES
+-- Normal + Brightening
+('Normal', 'Brightening',
+ 'Normal skin looks healthy but can lose radiance over time. Brightening routines maintain glow and prevent dullness.',
+ '{"Cleanser": "Fresh Soy Face Cleanser — Gentle and brightening",
+   "Treatment": "Vitamin C Serum (SkinCeuticals C E Ferulic) — Boosts radiance",
+   "Moisturizer": "Clinique Moisture Surge — Lightweight hydration",
+   "Sunscreen": "La Roche-Posay Anthelios SPF 50 — Broad-spectrum"}',
+ '{"Cleanser": "Fresh Soy Face Cleanser — Cleanses without stripping",
+   "Treatment": "The Ordinary AHA 7% Toning Solution — Gentle exfoliation",
+   "Moisturizer": "Clinique Moisture Surge — Locks in moisture"}'),
+
+-- Normal + Pigmentation
+('Normal', 'Pigmentation',
+ 'Normal skin can develop dark spots due to sun or hormonal changes. Targeted routines reduce pigment formation.',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Maintains skin balance",
+   "Treatment": "Kiehl’s Clearly Corrective Dark Spot Solution — Reduces pigmentation",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream — Lightweight hydration",
+   "Sunscreen": "EltaMD UV Clear SPF 46 — Protects against dark spots"}',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Preps skin for night treatments",
+   "Treatment": "The Ordinary Alpha Arbutin 2% + HA — Targets spots",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream — Hydrates overnight"}'),
+
+-- Normal + Dullness
+('Normal', 'Dullness',
+ 'Normal skin may appear lackluster due to pollution, fatigue, or buildup. Brightening and hydration restore glow.',
+ '{"Cleanser": "Aveeno Positively Radiant Cleanser — Gentle cleansing",
+   "Treatment": "Vitamin C Serum (La Roche-Posay Pure Vitamin C10) — Revives radiance",
+   "Moisturizer": "Belif Moisturizing Bomb — Refreshing hydration",
+   "Sunscreen": "Neutrogena Ultra Sheer SPF 50 — Protects skin glow"}',
+ '{"Cleanser": "Aveeno Positively Radiant Cleanser — Cleanses impurities",
+   "Treatment": "The Ordinary Lactic Acid 5% — Light exfoliation for glow",
+   "Moisturizer": "Belif Moisturizing Bomb — Locks hydration"}'),
+
+-- Normal + Dehydration
+('Normal', 'Dehydration',
+ 'Even normal skin can become dehydrated due to environment or habits. Hydrating routines restore water balance.',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Maintains moisture",
+   "Treatment": "Hyaluronic Acid Serum (The Ordinary) — Deep hydration",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream — Locks in water",
+   "Sunscreen": "La Roche-Posay Anthelios SPF 50 — Broad protection"}',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Gentle cleansing",
+   "Treatment": "Hyaluronic Acid Serum — Overnight hydration",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream — Keeps skin supple"}'),
+
+-- Normal + Aging
+('Normal', 'Aging',
+ 'Normal skin over time shows early signs of aging. Anti-aging routines maintain elasticity and prevent fine lines.',
+ '{"Cleanser": "Fresh Soy Face Cleanser — Gentle and nourishing",
+   "Treatment": "The Ordinary Buffet + Copper Peptides — Prevents early aging",
+   "Moisturizer": "Olay Regenerist Micro-Sculpting Cream — Hydrates and firms",
+   "Sunscreen": "EltaMD UV Clear SPF 46 — Protects against premature aging"}',
+ '{"Cleanser": "Fresh Soy Face Cleanser — Prepares skin for night actives",
+   "Treatment": "Retinol 0.2–0.5% Serum — Smooths fine lines",
+   "Moisturizer": "Olay Regenerist Night Cream — Overnight repair"}')
+;
+""")
+
+mycursor.execute("""
+INSERT INTO SkinInfo (skin_type, concern, description, am_routine, pm_routine)
+VALUES
+-- Combination + Acne
+('Combination', 'Acne',
+ 'Combination skin can break out due to oilier zones (T-zone). Targeted routines balance oil and prevent acne.',
+ '{"Cleanser": "La Roche-Posay Effaclar Gel Cleanser — Controls oil without drying",
+   "Treatment": "The Ordinary Niacinamide 10% + Zinc 1% — Reduces breakouts",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream — Lightweight hydration",
+   "Sunscreen": "EltaMD UV Clear SPF 46 — Non-greasy protection"}',
+ '{"Cleanser": "La Roche-Posay Effaclar Gel Cleanser — Removes impurities",
+   "Treatment": "Paula’s Choice 2% BHA Liquid Exfoliant — Prevents clogged pores",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream — Hydrates dry areas"}'),
+
+-- Combination + Pigmentation
+('Combination', 'Pigmentation',
+ 'Combination skin may develop uneven skin tone due to sun and hormonal factors. Brightening routines restore clarity.',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Gentle cleansing",
+   "Treatment": "Kiehl’s Clearly Corrective Dark Spot Solution — Reduces pigmentation",
+   "Moisturizer": "Belif Moisturizing Bomb — Maintains hydration",
+   "Sunscreen": "La Roche-Posay Anthelios SPF 50 — Broad-spectrum protection"}',
+ '{"Cleanser": "CeraVe Hydrating Cleanser",
+   "Treatment": "The Ordinary Alpha Arbutin 2% + HA — Target dark spots",
+   "Moisturizer": "Belif Moisturizing Bomb — Locks moisture"}'),
+
+-- Combination + Dehydration
+('Combination', 'Dehydration',
+ 'Even combination skin can get dehydrated in drier zones. Hydrating routines restore balance.',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Non-stripping",
+   "Treatment": "Hyaluronic Acid Serum (The Ordinary) — Boosts hydration",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream — Lightweight hydration",
+   "Sunscreen": "EltaMD UV Clear SPF 46 — Hydration and protection"}',
+ '{"Cleanser": "CeraVe Hydrating Cleanser",
+   "Treatment": "Hyaluronic Acid Serum — Night hydration",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream"}'),
+
+-- Combination + Large Pores
+('Combination', 'Large Pores',
+ 'Excess sebum and dead skin cause enlarged pores in combination skin. Pore-minimizing routines help refine skin texture.',
+ '{"Cleanser": "Kiehl’s Facial Fuel Oil Eliminator — Controls oil",
+   "Treatment": "The Ordinary Niacinamide 10% + Zinc 1% — Minimizes pores",
+   "Moisturizer": "Oil-free gel moisturizer",
+   "Sunscreen": "SPF 50 broad-spectrum"}',
+ '{"Cleanser": "Kiehl’s Facial Fuel Oil Eliminator",
+   "Treatment": "Retinol 0.2–0.5% serum — Reduces pore appearance",
+   "Moisturizer": "Lightweight gel moisturizer"}'),
+
+-- Combination + Oil Control
+('Combination', 'Oil Control',
+ 'Combination skin requires balancing oily and dry zones. Focus on gentle oil control and hydration.',
+ '{"Cleanser": "La Roche-Posay Effaclar Gel Cleanser — Controls oil",
+   "Treatment": "Niacinamide Serum — Reduces excess sebum",
+   "Moisturizer": "Lightweight gel moisturizer",
+   "Sunscreen": "Non-greasy SPF 50"}',
+ '{"Cleanser": "La Roche-Posay Effaclar Gel Cleanser",
+   "Treatment": "Salicylic Acid 2% — Targets oily areas",
+   "Moisturizer": "Oil-free gel moisturizer"}'),
+
+-- Combination + Uneven Texture
+('Combination', 'Uneven Texture',
+ 'Combination skin can have rough texture in oily areas. Gentle exfoliation and hydration smooth the skin.',
+ '{"Cleanser": "Gentle foaming cleanser",
+   "Treatment": "Niacinamide + Zinc serum — Smooths texture",
+   "Moisturizer": "Gel moisturizer",
+   "Sunscreen": "Broad-spectrum SPF 50"}',
+ '{"Cleanser": "Gentle foaming cleanser",
+   "Treatment": "Retinol or AHA serum — Refines skin",
+   "Moisturizer": "Lightweight gel moisturizer"}'),
+
+-- Combination + Dullness
+('Combination', 'Dullness',
+ 'Combination skin may look lackluster due to buildup and pollution. Brightening and hydration restore glow.',
+ '{"Cleanser": "CeraVe Foaming Cleanser — Removes impurities",
+   "Treatment": "Vitamin C serum — Boosts radiance",
+   "Moisturizer": "Lightweight gel",
+   "Sunscreen": "SPF 50"}',
+ '{"Cleanser": "CeraVe Foaming Cleanser",
+   "Treatment": "Gentle exfoliating serum — Improves glow",
+   "Moisturizer": "Lightweight gel moisturizer"}')
+;
+""")
+
+mycursor.execute("""
+INSERT INTO SkinInfo (skin_type, concern, description, am_routine, pm_routine)
+VALUES
+-- Combination + Acne
+('Combination', 'Acne',
+ 'Combination skin can break out due to oilier zones (T-zone). Targeted routines balance oil and prevent acne.',
+ '{"Cleanser": "La Roche-Posay Effaclar Gel Cleanser — Controls oil without drying",
+   "Treatment": "The Ordinary Niacinamide 10% + Zinc 1% — Reduces breakouts",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream — Lightweight hydration",
+   "Sunscreen": "EltaMD UV Clear SPF 46 — Non-greasy protection"}',
+ '{"Cleanser": "La Roche-Posay Effaclar Gel Cleanser — Removes impurities",
+   "Treatment": "Paula’s Choice 2% BHA Liquid Exfoliant — Prevents clogged pores",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream — Hydrates dry areas"}'),
+
+-- Combination + Pigmentation
+('Combination', 'Pigmentation',
+ 'Combination skin may develop uneven skin tone due to sun and hormonal factors. Brightening routines restore clarity.',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Gentle cleansing",
+   "Treatment": "Kiehl’s Clearly Corrective Dark Spot Solution — Reduces pigmentation",
+   "Moisturizer": "Belif Moisturizing Bomb — Maintains hydration",
+   "Sunscreen": "La Roche-Posay Anthelios SPF 50 — Broad-spectrum protection"}',
+ '{"Cleanser": "CeraVe Hydrating Cleanser",
+   "Treatment": "The Ordinary Alpha Arbutin 2% + HA — Target dark spots",
+   "Moisturizer": "Belif Moisturizing Bomb — Locks moisture"}'),
+
+-- Combination + Dehydration
+('Combination', 'Dehydration',
+ 'Even combination skin can get dehydrated in drier zones. Hydrating routines restore balance.',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Non-stripping",
+   "Treatment": "Hyaluronic Acid Serum (The Ordinary) — Boosts hydration",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream — Lightweight hydration",
+   "Sunscreen": "EltaMD UV Clear SPF 46 — Hydration and protection"}',
+ '{"Cleanser": "CeraVe Hydrating Cleanser",
+   "Treatment": "Hyaluronic Acid Serum — Night hydration",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream"}'),
+
+-- Combination + Large Pores
+('Combination', 'Large Pores',
+ 'Excess sebum and dead skin cause enlarged pores in combination skin. Pore-minimizing routines help refine skin texture.',
+ '{"Cleanser": "Kiehl’s Facial Fuel Oil Eliminator — Controls oil",
+   "Treatment": "The Ordinary Niacinamide 10% + Zinc 1% — Minimizes pores",
+   "Moisturizer": "Oil-free gel moisturizer",
+   "Sunscreen": "SPF 50 broad-spectrum"}',
+ '{"Cleanser": "Kiehl’s Facial Fuel Oil Eliminator",
+   "Treatment": "Retinol 0.2–0.5% serum — Reduces pore appearance",
+   "Moisturizer": "Lightweight gel moisturizer"}'),
+
+-- Combination + Oil Control
+('Combination', 'Oil Control',
+ 'Combination skin requires balancing oily and dry zones. Focus on gentle oil control and hydration.',
+ '{"Cleanser": "La Roche-Posay Effaclar Gel Cleanser — Controls oil",
+   "Treatment": "Niacinamide Serum — Reduces excess sebum",
+   "Moisturizer": "Lightweight gel moisturizer",
+   "Sunscreen": "Non-greasy SPF 50"}',
+ '{"Cleanser": "La Roche-Posay Effaclar Gel Cleanser",
+   "Treatment": "Salicylic Acid 2% — Targets oily areas",
+   "Moisturizer": "Oil-free gel moisturizer"}'),
+
+-- Combination + Uneven Texture
+('Combination', 'Uneven Texture',
+ 'Combination skin can have rough texture in oily areas. Gentle exfoliation and hydration smooth the skin.',
+ '{"Cleanser": "Gentle foaming cleanser",
+   "Treatment": "Niacinamide + Zinc serum — Smooths texture",
+   "Moisturizer": "Gel moisturizer",
+   "Sunscreen": "Broad-spectrum SPF 50"}',
+ '{"Cleanser": "Gentle foaming cleanser",
+   "Treatment": "Retinol or AHA serum — Refines skin",
+   "Moisturizer": "Lightweight gel moisturizer"}'),
+
+-- Combination + Dullness
+('Combination', 'Dullness',
+ 'Combination skin may look lackluster due to buildup and pollution. Brightening and hydration restore glow.',
+ '{"Cleanser": "CeraVe Foaming Cleanser — Removes impurities",
+   "Treatment": "Vitamin C serum — Boosts radiance",
+   "Moisturizer": "Lightweight gel",
+   "Sunscreen": "SPF 50"}',
+ '{"Cleanser": "CeraVe Foaming Cleanser",
+   "Treatment": "Gentle exfoliating serum — Improves glow",
+   "Moisturizer": "Lightweight gel moisturizer"}')
+;
+""")
+
+mycursor.execute("""
+INSERT INTO SkinInfo (skin_type, concern, description, am_routine, pm_routine)
+VALUES
+-- Mens + Acne & Breakouts
+('Mens', 'Acne & Breakouts',
+ 'Men with acne-prone skin often experience breakouts due to oil and shaving irritation. Gentle cleansing and targeted treatments help.',
+ '{"Cleanser": "CeraVe Foaming Facial Cleanser — Controls oil and impurities",
+   "Treatment": "Paula’s Choice 2% BHA Liquid Exfoliant — Targets breakouts",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream — Lightweight hydration",
+   "Sunscreen": "EltaMD UV Clear SPF 46 — Non-greasy protection"}',
+ '{"Cleanser": "CeraVe Foaming Facial Cleanser",
+   "Treatment": "Azelaic Acid 10% — Reduces breakouts",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream"}'),
+
+-- Mens + Oil Control
+('Mens', 'Oil Control',
+ 'Men with oily skin require routines that manage excess sebum without over-drying.',
+ '{"Cleanser": "Kiehl’s Facial Fuel Oil Eliminator — Reduces shine",
+   "Treatment": "Niacinamide 10% serum — Controls sebum production",
+   "Moisturizer": "Lightweight gel moisturizer",
+   "Sunscreen": "SPF 50 non-greasy broad-spectrum"}',
+ '{"Cleanser": "Kiehl’s Facial Fuel Oil Eliminator",
+   "Treatment": "Salicylic Acid 2% — Prevents breakouts",
+   "Moisturizer": "Lightweight gel moisturizer"}'),
+
+-- Mens + Dehydration
+('Mens', 'Dehydration',
+ 'Men with dehydrated skin need routines that restore moisture and protect the barrier.',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Non-stripping",
+   "Treatment": "Hyaluronic Acid Serum — Replenishes moisture",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream",
+   "Sunscreen": "EltaMD UV Clear SPF 46"}',
+ '{"Cleanser": "CeraVe Hydrating Cleanser",
+   "Treatment": "Squalane Oil — Locks in hydration",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream"}'),
+
+-- Mens + Sensitivity & Irritation
+('Mens', 'Sensitivity & Irritation',
+ 'Men with sensitive skin can experience redness and irritation. Gentle, barrier-supporting routines are essential.',
+ '{"Cleanser": "La Roche-Posay Toleriane Gentle Cleanser — Soothes skin",
+   "Treatment": "Niacinamide Serum — Reduces irritation",
+   "Moisturizer": "Vanicream Moisturizing Cream — Non-irritating",
+   "Sunscreen": "La Roche-Posay Anthelios Mineral SPF 50"}',
+ '{"Cleanser": "La Roche-Posay Toleriane Gentle Cleanser",
+   "Treatment": "Squalane Oil — Night hydration",
+   "Moisturizer": "Vanicream Moisturizing Cream"}'),
+
+-- Mens + Aging & Dullness
+('Mens', 'Aging & Dullness',
+ 'Men concerned with aging and dullness benefit from antioxidant-rich routines and gentle exfoliation.',
+ '{"Cleanser": "CeraVe Hydrating Cleanser",
+   "Treatment": "Vitamin C Serum — Brightens and reduces fine lines",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream",
+   "Sunscreen": "EltaMD UV Clear SPF 46"}',
+ '{"Cleanser": "CeraVe Hydrating Cleanser",
+   "Treatment": "Retinol 0.2–0.5% serum — Night anti-aging",
+   "Moisturizer": "Neutrogena Hydro Boost Gel-Cream"}')
+;
+""")
+
+mycursor.execute("""
+INSERT INTO SkinInfo (skin_type, concern, description, am_routine, pm_routine) VALUES
+('Aging', 'Fine Lines & Wrinkles', 
+ 'Aging skin shows fine lines and wrinkles. A routine with gentle exfoliation, hydration, and anti-aging ingredients is essential.', 
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Gentle cleansing without stripping", "Treatment": "The Ordinary Retinol 0.5% — Reduces fine lines", "Moisturizer": "Neutrogena Hydro Boost Water Gel — Hydrates and plumps", "Sunscreen": "La Roche-Posay Anthelios SPF 50 — Protects from UV damage"}',
+ '{"Cleanser": "CeraVe Hydrating Cleanser — Removes impurities without drying", "Treatment": "Paula’s Choice 1% Retinol — Supports cell turnover", "Moisturizer": "Neutrogena Hydro Boost Water Gel — Locks in moisture"}'),
+
+('Aging', 'Loss of Elasticity',
+ 'Aging skin loses firmness and elasticity. Ingredients that boost collagen and hydrate deeply help maintain skin resilience.',
+ '{"Cleanser": "Gentle foaming cleanser — Prepares skin for active ingredients", "Treatment": "Vitamin C serum — Stimulates collagen and brightens", "Moisturizer": "Rich moisturizer with peptides — Supports skin structure", "Sunscreen": "Broad-spectrum SPF 50"}',
+ '{"Cleanser": "Gentle foaming cleanser", "Treatment": "Peptide serum — Enhances elasticity", "Moisturizer": "Rich moisturizer — Hydrates and firms"}'),
+
+('Aging', 'Dryness & Dehydration',
+ 'Aging skin is prone to dryness. A routine focused on intense hydration and barrier repair is key.',
+ '{"Cleanser": "CeraVe Hydrating Cleanser", "Treatment": "Hyaluronic Acid serum — Deep hydration", "Moisturizer": "Thick cream moisturizer — Locks in moisture", "Sunscreen": "SPF 50 broad-spectrum"}',
+ '{"Cleanser": "CeraVe Hydrating Cleanser", "Treatment": "Hyaluronic Acid serum", "Moisturizer": "Thick cream moisturizer"}'),
+
+('Aging', 'Dullness',
+ 'Aging skin can look lackluster. Brightening and gentle exfoliation improve radiance.',
+ '{"Cleanser": "Brightening gel cleanser — Removes impurities", "Treatment": "Vitamin C serum — Enhances glow", "Moisturizer": "Lightweight hydrating gel", "Sunscreen": "SPF 50"}',
+ '{"Cleanser": "Brightening gel cleanser", "Treatment": "AHA serum — Promotes cell turnover", "Moisturizer": "Hydrating gel"}'),
+
+('Aging', 'Pigmentation',
+ 'Aging skin may develop pigmentation spots. Ingredients that brighten and protect are important.',
+ '{"Cleanser": "CeraVe Foaming Cleanser", "Treatment": "Niacinamide 10% serum — Reduces pigmentation", "Moisturizer": "Light gel moisturizer", "Sunscreen": "SPF 50 broad-spectrum"}',
+ '{"Cleanser": "CeraVe Foaming Cleanser", "Treatment": "AHA or gentle exfoliant", "Moisturizer": "Light gel moisturizer"}');
+""")'''
+
+mycursor.execute("""
+INSERT INTO SkinInfo (skin_type, concern, description, am_routine, pm_routine)
+VALUES
+(
+  'Sensitive',
+  'Redness',
+  'Sensitive skin with redness needs calming and soothing ingredients to reduce inflammation.',
+  '{"Cleanser": "La Roche-Posay Toleriane Hydrating Gentle Cleanser", "Treatment": "Avene Antirougeurs Soothing Serum", "Moisturizer": "CeraVe Moisturizing Cream", "Sunscreen": "EltaMD UV Clear SPF 46"}',
+  '{"Cleanser": "La Roche-Posay Toleriane Hydrating Gentle Cleanser", "Treatment": "Azelaic Acid 10% — Reduces redness and irritation", "Moisturizer": "CeraVe PM Facial Moisturizing Lotion"}'
+),
+(
+  'Sensitive',
+  'Sensitivity',
+  'Sensitive skin requires gentle, fragrance-free products that strengthen the skin barrier.',
+  '{"Cleanser": "Vanicream Gentle Facial Cleanser", "Treatment": "La Roche-Posay Cicaplast Baume B5", "Moisturizer": "Bioderma Sensibio Light Cream", "Sunscreen": "ISDIN Eryfotona Actinica SPF 50"}',
+  '{"Cleanser": "Vanicream Gentle Facial Cleanser", "Treatment": "Niacinamide 5% Serum — Calms sensitivity", "Moisturizer": "Bioderma Sensibio Light Cream"}'
+),
+(
+  'Sensitive',
+  'Barrier Repair',
+  'When the skin barrier is damaged, focus on ceramides and hydrating, soothing products.',
+  '{"Cleanser": "CeraVe Hydrating Cleanser", "Treatment": "Paula’s Choice Omega+ Complex Serum", "Moisturizer": "CeraVe Moisturizing Cream", "Sunscreen": "Eucerin Sensitive Mineral SPF 50"}',
+  '{"Cleanser": "CeraVe Hydrating Cleanser", "Treatment": "La Roche-Posay Cicaplast Baume B5", "Moisturizer": "CeraVe Moisturizing Cream"}'
+),
+(
+  'Sensitive',
+  'Dehydration',
+  'Dehydrated sensitive skin needs gentle hydration boosters like hyaluronic acid and soothing agents.',
+  '{"Cleanser": "Simple Micellar Gel Wash", "Treatment": "The Ordinary Hyaluronic Acid 2% + B5", "Moisturizer": "Clinique Moisture Surge", "Sunscreen": "Avene Very High Protection SPF 50+"}',
+  '{"Cleanser": "Simple Micellar Gel Wash", "Treatment": "La Roche-Posay Hyalu B5 Serum", "Moisturizer": "Clinique Moisture Surge"}'
+),
+(
+  'Sensitive',
+  'Acne',
+  'Sensitive skin with acne needs a careful balance of soothing and mild anti-acne treatments.',
+  '{"Cleanser": "Avene Cleanance Cleansing Gel", "Treatment": "La Roche-Posay Effaclar Duo", "Moisturizer": "Cetaphil PRO Oil Absorbing Moisturizer", "Sunscreen": "EltaMD UV Clear SPF 46"}',
+  '{"Cleanser": "Avene Cleanance Cleansing Gel", "Treatment": "Differin (Adapalene) Gel 0.1%", "Moisturizer": "Cetaphil PRO Oil Absorbing Moisturizer"}'
+)
+""")
+
+
+db.commit()

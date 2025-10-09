@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, url_for, session, redirect, flash, make_response
 from flask_mysqldb import MySQL
-from datetime import datetime
+from datetime import datetime, timedelta
 import re
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
+import uuid
 
 
 app = Flask(__name__)
@@ -21,6 +22,81 @@ mysql = MySQL(app)
 @app.route('/')
 def main_page():
     return render_template('project_skincare.html')  
+
+def create_user_session(user_id, device_id=None):
+    """Create a new session in UserInfo and invalidate old sessions."""
+    cur = mysql.connection.cursor()
+    token = str(uuid.uuid4())
+    expiry_time = datetime.now() + timedelta(hours=1)
+
+    # Invalidate old sessions (log out everywhere)
+    cur.execute("""
+        UPDATE UserInfo
+        SET is_logged_in = 0, session_token = NULL, session_expiry = NULL, device_id = NULL
+        WHERE User_id = %s
+    """, (user_id,))
+
+    # Create new session
+    cur.execute("""
+        UPDATE UserInfo
+        SET is_logged_in = 1,
+            session_token = %s,
+            last_activity = NOW(),
+            session_expiry = %s,
+            device_id = %s
+        WHERE User_id = %s
+    """, (token, expiry_time, device_id, user_id))
+
+    mysql.connection.commit()
+    cur.close()
+    return token
+
+def validate_session(user_id, token):
+    """Check if the current session is valid and active."""
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        SELECT last_activity, session_expiry, is_logged_in
+        FROM UserInfo
+        WHERE User_id = %s AND session_token = %s
+    """, (user_id, token))
+    user = cur.fetchone()
+    cur.close()
+
+    if not user:
+        return False
+
+    last_activity, session_expiry, is_logged_in = user
+
+    # If not logged in or session expired
+    if not is_logged_in or datetime.now() > session_expiry:
+        deactivate_session(user_id)
+        return False
+
+    # Extend session on activity
+    new_expiry = datetime.now() + timedelta(minutes=10)
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        UPDATE UserInfo
+        SET last_activity = NOW(), session_expiry = %s
+        WHERE User_id = %s
+    """, (new_expiry, user_id))
+    mysql.connection.commit()
+    cur.close()
+
+    return True
+
+def deactivate_session(user_id):
+    """Clear session data in UserInfo."""
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        UPDATE UserInfo
+        SET is_logged_in = 0, session_token = NULL,
+            session_expiry = NULL, device_id = NULL
+        WHERE User_id = %s
+    """, (user_id,))
+    mysql.connection.commit()
+    cur.close()
+
 
 @app.route('/login_home')
 def login_home():
@@ -43,10 +119,14 @@ def login_submit():
         cursor.close()
 
         if user and check_password_hash(user[2], password):
+            device_id = request.headers.get('User-Agent')  # identifies the device/browser
+            session_token = create_user_session(user[0], device_id)  # user[0] = User_id
+
             # login success
             session['user_id'] = user[0]
             session['user_name'] = user[1]
             session['gender'] = user[3]
+            session['session_token'] = session_token
             flash("Login successful!", "success")
             return redirect(url_for('skin_info'))
         else:
@@ -190,7 +270,7 @@ def recommendations():
 
     if not user_skin:
         flash("Please complete the skin quiz first.", "warning")
-        return redirect(url_for("quiz"))
+        return render_template("product.html", diet=[], skin_type=None, concern=None, image_url=None)
 
     skin_type = user_skin[0].strip()
     concern = user_skin[1].strip()
@@ -456,7 +536,7 @@ def edit_profile():
         username_pattern = r"^[a-zA-Z0-9_]{3,16}$"
         email_pattern = r"^(?!.*\.\.)(?!\.)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[A-Za-z]{2,}$"
         phone_pattern = r"^[6-9]\d{9}$"   # Indian 10-digit phone
-        age_pattern = r"^(1[3-9]|[2-9][0-9]|1[01][0-9]|120)$"  # optional: 13–120 valid ages
+        age_pattern = r"^(1[3-9]|[2-9][0-9])$"  # optional: 13–120 valid ages
 
         # --- Validation checks ---
         if not re.match(username_pattern, username):
@@ -472,7 +552,7 @@ def edit_profile():
             return redirect(url_for("edit_profile"))
 
         if age and not re.match(age_pattern, age):
-            flash("Invalid age! Must be between 13 and 120.", "danger")
+            flash("Invalid age! Must be between 13 and 99.", "danger")
             return redirect(url_for("edit_profile"))
 
         cur.execute("""
@@ -524,6 +604,21 @@ def ingredients():
 def privacy():
     return render_template('privacy.html')
 
+@app.before_request
+def check_session_validity():
+    protected_routes = ['skin_info', 'show_suggestions', 'profile_page', 
+                        'edit_profile', 'submit_skin_info', 'recommendations']
+
+    if request.endpoint in protected_routes:
+        user_id = session.get('user_id')
+        token = session.get('session_token')
+
+        if not user_id or not token or not validate_session(user_id, token):
+            session.clear()
+            flash("Session expired or logged in elsewhere. Please log in again.", "warning")
+            return redirect(url_for('login_submit'))
+
+
 
 # @app.route('/logout')
 # def logout():
@@ -538,19 +633,19 @@ def privacy():
 
 @app.route('/logout')
 def logout():
-    # Remove only login-related session keys
-    session.pop('user_id', None)
-    session.pop('user_name', None)
-    session.pop('gender', None)
+    user_id = session.get('user_id')
+    if user_id:
+        deactivate_session(user_id)
 
+    session.clear()
     flash("You have been logged out.", "info")
 
-    # Redirect to login with headers to prevent caching
     response = make_response(redirect(url_for('login_submit')))
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     return response
+
 
 if __name__ == "__main__":
     app.run(debug=True)
