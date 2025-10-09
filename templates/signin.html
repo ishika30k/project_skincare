@@ -136,7 +136,8 @@
 
       <div class="mb-3">
         <label for="age" class="form-label">Age</label>
-        <input type="number" class="form-control" id="age" name="age" required min="1" max="120" />
+        <input type="number" class="form-control" id="age" name="age"
+       value="{{ age }}" required maxlength="2" min="13" max="99">
       </div>
 
       <div class="mb-3">
@@ -183,7 +184,7 @@
     const emailRegex = /^(?!.*\.\.)(?!\.)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[A-Za-z]{2,}$/;
     const usernameRegex = /^[a-zA-Z0-9]{3,15}$/;
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
-    const phoneRegex = /^[0-9]{10}$/;
+    const phoneRegex = /^[6-9]\d{9}$/;
 
     // Input events
     emailInput.addEventListener("input", () => {
@@ -202,9 +203,24 @@
     });
 
     phoneInput.addEventListener("input", () => {
-      phoneMsg.textContent = phoneRegex.test(phoneInput.value) ? "✅ Valid phone" : "❌ Must be 10 digits";
-      phoneMsg.style.color = phoneRegex.test(phoneInput.value) ? "green" : "red";
+      // Remove non-digits
+      phoneInput.value = phoneInput.value.replace(/\D/g, "");
+
+      // Restrict length to 10 digits
+      if (phoneInput.value.length > 10) {
+        phoneInput.value = phoneInput.value.slice(0, 10);
+      }
+
+      // Validate phone format
+      if (phoneRegex.test(phoneInput.value)) {
+        phoneMsg.textContent = "✅ Valid phone";
+        phoneMsg.style.color = "green";
+      } else {
+        phoneMsg.textContent = "❌ Must be 10 digits";
+        phoneMsg.style.color = "red";
+      }
     });
+
 
     // Prevent submit if invalid
     form.addEventListener("submit", (e) => {

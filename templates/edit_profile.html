@@ -93,7 +93,9 @@
       </div>
       <div class="mb-3">
         <label for="age" class="form-label">Age</label>
-        <input type="number" class="form-control" id="age" name="age" value="{{ age }}" required>
+        <input type="number" class="form-control" id="age" name="age"
+       value="{{ age }}" required maxlength="2" min="13" max="99">
+        <span id="ageMsg" style="font-size:0.9em; margin-left:5px;"></span>
       </div>
       <div class="mb-3">
         <label for="gender" class="form-label">Gender</label>
@@ -119,6 +121,24 @@
       const usernameInput = document.getElementById("username");
       const emailInput = document.getElementById("email");
       const phoneInput = document.getElementById("phone");
+      const ageInput = document.getElementById("age");
+      const ageMsg = document.getElementById("ageMsg");
+      const ageRegex = /^(1[3-9]|[2-9][0-9])$/; // allows 13–99 only
+
+      ageInput.addEventListener("input", () => {
+        if (ageInput.value.length > 2) {
+          ageInput.value = ageInput.value.slice(0, 2);
+        }
+
+        if (ageRegex.test(ageInput.value)) {
+          ageMsg.textContent = "✅ Valid age";
+          ageMsg.style.color = "green";
+        } else {
+          ageMsg.textContent = "❌ Age must be between 13–99";
+          ageMsg.style.color = "red";
+        }
+      });
+
 
       // Create message spans dynamically if not present
       const createMsgSpan = (input) => {
@@ -186,6 +206,22 @@
           alert("Please fix errors before submitting the form!");
         }
       });
+
+      // Prevent submit if invalid
+      const form = document.querySelector("form");
+      form.addEventListener("submit", (e) => {
+        if (
+          !usernameRegex.test(usernameInput.value) ||
+          !emailRegex.test(emailInput.value) ||
+          !phoneRegex.test(phoneInput.value) ||
+          !ageRegex.test(ageInput.value)
+        ) {
+          e.preventDefault();
+          alert("Please fix errors before submitting the form!");
+        }
+      });
+
+
     </script>
 
 </body>
