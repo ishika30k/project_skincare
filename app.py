@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, url_for, session, redirect, flash, make_response
+from flask import Flask, render_template, request, url_for, session, redirect, flash, make_response,request_finished,request_started
 from flask_mysqldb import MySQL
 from datetime import datetime, timedelta
 import re
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 import uuid
+from blinker import Namespace
 
 
 app = Flask(__name__)
@@ -18,13 +19,20 @@ app.config['MYSQL_DB'] = 'skincare_suggestion'
 
 mysql = MySQL(app)
 
+signals=Namespace()
+
+user_registered = signals.signal('user-registered')
+
+def after_user_registered(sender, **extra):
+    print(f"✅ User registered: {extra.get('username')}")
+
+user_registered.connect(after_user_registered)
 
 @app.route('/')
 def main_page():
     return render_template('project_skincare.html')  
 
 def create_user_session(user_id, device_id=None):
-    """Create a new session in UserInfo and invalidate old sessions."""
     cur = mysql.connection.cursor()
     token = str(uuid.uuid4())
     expiry_time = datetime.now() + timedelta(hours=1)
