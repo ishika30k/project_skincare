@@ -243,7 +243,6 @@ def signin():
                     flash("sign up first")
             '''
 
-
 @app.route('/skin_info')
 def skin_info():
     if 'user_id' not in session:
