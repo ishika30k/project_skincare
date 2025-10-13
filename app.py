@@ -21,12 +21,28 @@ mysql = MySQL(app)
 
 signals=Namespace()
 
-user_registered = signals.signal('user-registered')
+user_logged_in = signals.signal('user-logged-in')
 
-def after_user_registered(sender, **extra):
-    print(f"✅ User registered: {extra.get('username')}")
+def after_user_logged_in(sender, user_id, **extra):
+    cur = mysql.connection.cursor()
+    # Get latest user-specific skin info
+    cur.execute("""
+        SELECT MAX(Last_updated_at)
+        FROM User_Skin_Info
+        WHERE User_id = %s
+    """, (user_id,))
+    last_update = cur.fetchone()[0]
+    cur.close()
 
-user_registered.connect(after_user_registered)
+    # Check session to see if user has seen it
+    last_seen = session.get('last_seen_skin_update')
+    if not last_seen or str(last_seen) != str(last_update):
+        session['show_skin_update_popup'] = True
+        session['last_seen_skin_update'] = str(last_update)
+    else:
+        session['show_skin_update_popup'] = False
+
+user_logged_in.connect(after_user_logged_in)
 
 @app.route('/')
 def main_page():
@@ -135,6 +151,21 @@ def login_submit():
             session['user_name'] = user[1]
             session['gender'] = user[3]
             session['session_token'] = session_token
+            cur = mysql.connection.cursor()
+            cur.execute("""
+                SELECT MAX(Last_updated_at)
+                FROM User_Skin_Info
+                WHERE User_id = %s
+            """, (user[0],))
+            last_update = cur.fetchone()[0]
+            cur.close()
+
+            last_seen = session.get('last_seen_skin_update')
+            if not last_seen or str(last_seen) != str(last_update):
+                session['show_skin_update_popup'] = True
+                session['last_seen_skin_update'] = str(last_update)
+            else:
+                session['show_skin_update_popup'] = False
             flash("Login successful!", "success")
             return redirect(url_for('skin_info'))
         else:
@@ -213,13 +244,14 @@ def signin():
             '''
 
 
-@app.route('/skin_info', methods=['GET'])
+@app.route('/skin_info')
 def skin_info():
     if 'user_id' not in session:
         flash("Please login first!", "warning")
         return redirect(url_for('login_submit'))
 
-    return render_template('skin_info.html', gender=session.get('gender'))
+    show_update = session.pop('show_skin_update_popup', False)
+    return render_template('skin_info.html', show_update=show_update)
 
 
 @app.route('/submit_skin_info', methods=['POST'])
@@ -626,6 +658,9 @@ def check_session_validity():
             flash("Session expired or logged in elsewhere. Please log in again.", "warning")
             return redirect(url_for('login_submit'))
 
+@app.route('/oily_skin')
+def oily_skin():
+    return render_template('oily.html')
 
 
 # @app.route('/logout')
