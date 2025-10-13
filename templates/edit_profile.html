@@ -18,6 +18,7 @@
       color: white !important;
     }
     .edit-box {
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
       background-color: rgba(255, 255, 255, 0.6);
       padding: 30px;
       border-radius: 15px;
@@ -107,6 +108,11 @@
           <option {% if gender=='Prefer not to say' %}selected{% endif %}>Prefer not to say</option>
         </select>
       </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" value="{{ password }}" required minlength="6" maxlength="20">
+        <span id="passwordMsg" style="font-size:0.9em; margin-left:5px;"></span>
+      </div>
       <div class="d-grid">
         <button type="submit" class="btn btn-custom">Update Profile</button>
       </div>
@@ -194,33 +200,36 @@
         }
       });
 
-      // Optional: prevent submit if invalid
-      const form = document.querySelector("form");
-      form.addEventListener("submit", (e) => {
-        if (
-          !usernameRegex.test(usernameInput.value) ||
-          !emailRegex.test(emailInput.value) ||
-          !phoneRegex.test(phoneInput.value)
-        ) {
-          e.preventDefault();
-          alert("Please fix errors before submitting the form!");
-        }
-      });
-
-      // Prevent submit if invalid
-      const form = document.querySelector("form");
       form.addEventListener("submit", (e) => {
         if (
           !usernameRegex.test(usernameInput.value) ||
           !emailRegex.test(emailInput.value) ||
           !phoneRegex.test(phoneInput.value) ||
-          !ageRegex.test(ageInput.value)
+          !ageRegex.test(ageInput.value) ||
+          !passwordRegex.test(passwordInput.value)
         ) {
           e.preventDefault();
           alert("Please fix errors before submitting the form!");
         }
       });
 
+
+
+      const passwordInput = document.getElementById("password");
+      const passwordMsg = document.getElementById("passwordMsg");
+
+      // Password: at least 6 chars, 1 uppercase, 1 lowercase, 1 digit
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{6,20}$/;
+
+      passwordInput.addEventListener("input", () => {
+        if (passwordRegex.test(passwordInput.value)) {
+          passwordMsg.textContent = "✅ Strong password";
+          passwordMsg.style.color = "green";
+        } else {
+          passwordMsg.textContent = "❌ Must be 6–20 chars, include upper, lower, and digit";
+          passwordMsg.style.color = "red";
+        }
+      });
 
     </script>
 
