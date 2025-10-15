@@ -51,7 +51,7 @@ def main_page():
 def create_user_session(user_id, device_id=None):
     cur = mysql.connection.cursor()
     token = str(uuid.uuid4())
-    expiry_time = datetime.now() + timedelta(hours=1)
+    expiry_time = datetime.now() + timedelta(seconds=10)
 
     # Invalidate old sessions (log out everywhere)
     cur.execute("""
@@ -249,6 +249,32 @@ def skin_info():
         flash("Please login first!", "warning")
         return redirect(url_for('login_submit'))
 
+    user_id = session['user_id']
+
+    # Check session expiry
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT session_expiry FROM UserInfo WHERE User_id = %s", (user_id,))
+    result = cur.fetchone()
+    cur.close()
+
+    if result:
+        expiry_time = result[0]
+        if expiry_time and datetime.now() > expiry_time:
+            # Expired → clear session and log out
+            cur = mysql.connection.cursor()
+            cur.execute("""
+                UPDATE UserInfo
+                SET is_logged_in = 0, session_token = NULL, session_expiry = NULL, device_id = NULL
+                WHERE User_id = %s
+            """, (user_id,))
+            mysql.connection.commit()
+            cur.close()
+
+            session.clear()
+            flash("Session expired. Please log in again.", "warning")
+            return redirect(url_for('login_submit'))
+
+    # If not expired, continue to page
     show_update = session.pop('show_skin_update_popup', False)
     return render_template('skin_info.html', show_update=show_update)
 
