@@ -93,13 +93,27 @@
     background: #5149d6;
 } 
 
+.popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #fffae6;
+    color: #333;
+    padding: 15px 20px;
+    border: 1px solid #ffcc00;
+    border-radius: 5px;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    font-weight: 500;
+}
+
   </style>
 </head>
 <body>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand" href="/">🌿 GlowPath</a>
+      <a class="navbar-brand" href="/login_home"> GlowPath</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -108,18 +122,22 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href='/login_home'>Home</a>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link text-white dropdown-toggle" href="#" id="settingsDropdown" role="button" data-bs-toggle="dropdown">Skin Info</a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href='/oily_skin'>Oily Skin</a></li>
+              <li><a class="dropdown-item" href='/dry_skin'>Dry Skin</a></li>
+            </ul>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href='/about_us'>About Us</a>
             </li>
-          
-          
-          <li class="nav-item dropdown">
-            <a class="nav-link text-white dropdown-toggle" href="#" id="settingsDropdown" role="button" data-bs-toggle="dropdown">Settings</a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href='/profile_page'>Profile</a></li>
-              <li><a class="dropdown-item" href='/logout'>Logout</a></li>
-            </ul>
-          </li>
+          <li class="nav-item">
+            <a class="nav-link" href='/profile_page'>Profile</a>
+            </li>
+          <li class="nav-item">
+            <a class="nav-link" href='/logout'>Logout</a>
+            </li>
         </ul>
       </div>
     </div>
@@ -141,9 +159,11 @@
           <option value="Dry">Dry</option>
           <option value="Normal">Normal</option>
           <option value="Combination">Combination</option>
-          <option value="Combination">Sensitive</option>
-
+          <option value="Sensitive">Sensitive</option>
+          <option value="Aging">Aging</option>
+          <option value="Mens">Mens</option>
         </select>
+
         <h6>Find your skin type</h>
         <a href="/description" >
           <button type="button" class="info-btn">i</button>
@@ -157,28 +177,6 @@
       </select>
       </div>
 
-      <div class="mb-4">
-        <label class="form-label">3. Your Skin Goal</label>
-        <select name="goal" class="form-select" required>
-          <option value="">-- Select --</option>
-          <option value="Glowing skin">Glowing skin</option>
-          <option value="Reduce acne">Reduce acne</option>
-          <option value="Even skin tone">Even skin tone</option>
-          <option value="Hydration">Hydration</option>
-        </select>
-      </div>
-
-      <!-- Hidden field for gender (comes from session) -->
-      <input type="hidden" id="gender" name="gender" value="{{ gender }}">
-      <!-- Pregnant question wrapper -->
-      <div class="mb-4" id="pregnant-wrapper" style="display:none;">
-        <label class="form-label">4. Are you pregnant or breastfeeding?</label>
-        <select name="pregnant" class="form-select">
-          <option value="">-- Select --</option>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-        </select>
-      </div>
 
       <!-- Submit + Recommendations buttons -->
     <div class="d-grid mt-4">
@@ -190,34 +188,18 @@
     </form>
     </div>
 
-      <script>
-        const gender = document.getElementById("gender").value;
-        const pregnantWrapper = document.getElementById("pregnant-wrapper");
-        if (gender === "Female") {
-          pregnantWrapper.style.display = "block";
-        }
-      </script>
+      
 
-      <script>
-        const genderSelect = document.getElementById("gender");
-        const pregnantWrapper = document.getElementById("pregnant-wrapper");
-
-        genderSelect.addEventListener("change", function () {
-          if (this.value === "Female") {
-            pregnantWrapper.style.display = "block";
-          } else {
-            pregnantWrapper.style.display = "none";
-          }
-        });
-      </script>
 
   <script>
   const concernOptions = {
-    "Oily": ["Acne","Large Pores", "Oil Control","Uneven Texture", "Dullness" , "Pigmentation"],
-    "Dry": ["Dehydration", "Sensitivity", "Aging", "Dullness","Barrier Repair"],
-    "Normal": ["Brightening", "Pigmentation","Dullness","Dehydration","Aging"],
-    "Combination": ["Acne", "Pigmentation", "Dehydration","Large Pores","Oil Control","Uneven Texture","Dullness"],
-    "Sensitive" : ["Redness","Sensitivity","Barrier Repair","Dehydration","Acne"]
+    "Oily": ["Acne", "Large Pores", "Oil Control", "Uneven Texture", "Dullness", "Pigmentation"],
+    "Dry": ["Dehydration", "Sensitivity", "Aging", "Dullness", "Barrier Repair"],
+    "Normal": ["Brightening", "Pigmentation", "Dullness", "Dehydration", "Aging"],
+    "Combination": ["Acne", "Pigmentation", "Dehydration", "Large Pores", "Oil Control", "Uneven Texture", "Dullness"],
+    "Sensitive": ["Redness", "Sensitivity", "Barrier Repair", "Dehydration", "Acne"],
+    "Aging": ["Fine Lines & Wrinkles", "Loss of Elasticity", "Dryness & Dehydration", "Dullness", "Pigmentation"],
+    "Mens": ["Acne & Breakouts", "Oil Control", "Dehydration", "Sensitivity & Irritation", "Aging & Dullness"]
   };
 
   const skinTypeSelect = document.getElementById("skin_type");
@@ -237,6 +219,53 @@
     }
   });
 
+  
+
 </script>
+
+{% if show_update %}
+<div id="skinPopup" style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #6c63ff;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    cursor: pointer;
+">
+    <span>New skin info available!</span>
+    <button id="popupCloseBtn" style="
+        background: transparent;
+        border: none;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        cursor: pointer;
+        margin-left: 10px;
+    ">×</button>
+</div>
+
+<script>
+const popup = document.getElementById("skinPopup");
+const closeBtn = document.getElementById("popupCloseBtn");
+
+// Clicking the popup (except the ×) redirects
+popup.addEventListener("click", function(e) {
+    if (e.target !== closeBtn) { // avoid triggering when clicking ×
+        window.location.href = "/oily_skin"; // redirect to oily skin page
+    }
+});
+
+// Clicking × just closes the popup
+closeBtn.addEventListener("click", function(e) {
+    popup.style.display = "none";
+    e.stopPropagation(); // prevent the redirect
+});
+</script>
+{% endif %}
+
 </body>
 </html>
