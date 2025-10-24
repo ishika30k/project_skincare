@@ -73,7 +73,6 @@ def create_user_session(user_id, device_id=None):
     mysql.connection.commit()
     cur.close()
     return token
-    print("session created")    
 
 def validate_session(user_id, token):
     """Check if the current session is valid and active."""
