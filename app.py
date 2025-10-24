@@ -34,7 +34,6 @@ def after_user_logged_in(sender, user_id, **extra):
     last_update = cur.fetchone()[0]
     cur.close()
 
-    # Check session to see if user has seen it
     last_seen = session.get('last_seen_skin_update')
     if not last_seen or str(last_seen) != str(last_update):
         session['show_skin_update_popup'] = True
@@ -51,7 +50,7 @@ def main_page():
 def create_user_session(user_id, device_id=None):
     cur = mysql.connection.cursor()
     token = str(uuid.uuid4())
-    expiry_time = datetime.now() + timedelta(seconds=10)
+    expiry_time = datetime.now() + timedelta(hours=1)
 
     # Invalidate old sessions (log out everywhere)
     cur.execute("""
@@ -417,7 +416,6 @@ def show_suggestions():
     if info:
         description, am_routine_json, pm_routine_json,image_url = info
 
-        # Parse JSON strings to dicts
         am_routine = json.loads(am_routine_json)
         pm_routine = json.loads(pm_routine_json)
     else:
@@ -683,21 +681,27 @@ def check_session_validity():
             flash("Session expired or logged in elsewhere. Please log in again.", "warning")
             return redirect(url_for('login_submit'))
 
-@app.route('/oily_skin')
-def oily_skin():
-    return render_template('oily.html')
+@app.route('/skin1')
+def skin1():
+    if 'user_id' not in session:
+        flash("Please login first!", "warning")
+        return redirect(url_for('login_submit'))
+    return render_template('skin1.html', page=1, total_pages=3)
 
+@app.route('/skin2')
+def skin2():
+    if 'user_id' not in session:
+        flash("Please login first!", "warning")
+        return redirect(url_for('login_submit'))
+    return render_template('skin2.html', page=2, total_pages=3)
 
-# @app.route('/logout')
-# def logout():
-#     session.clear()
-#     flash("You have been logged out.", "info")
-#     response = make_response(redirect(url_for('login_submit')))
-#     response.headers['Cache-Control'] = 'no-cache, no_store, must_revalidate'
-#     response.headers['Pragma'] = 'no-cache'
-#     response.headers['Expires'] = '0'
-#     return response
-#     #return redirect(url_for('login_submit'))
+@app.route('/skin3')
+def skin3():
+    if 'user_id' not in session:
+        flash("Please login first!", "warning")
+        return redirect(url_for('login_submit'))
+    return render_template('skin3.html', page=3, total_pages=3)
+
 
 @app.route('/logout')
 def logout():
