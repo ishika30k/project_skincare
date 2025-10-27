@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlowPath - Glass Skin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #d2dada;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(90deg, #000 0%, #2d2d2d 100%) !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+    .nav-link:hover {
+      color: #ffc0cb !important;
+      transform: translateY(-1px);
+    }
+
+    .main-container {
+      padding: 100px 20px 50px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .page-header h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #ff1493;
+      margin-bottom: 10px;
+    }
+    .page-header p {
+      color: black;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+    .section h4 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #2d2d2d;
+      margin-bottom: 15px;
+    }
+    .section p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #2d2d2d;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+    ul li {
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .action-button {
+      text-align: center;
+      margin-top: 40px;
+    }
+    .btn-custom {
+      background: linear-gradient(135deg, #6c63ff 0%, #8b7fff 100%);
+      color: #fff;
+      font-weight: 600;
+      padding: 16px 40px;
+      border-radius: 12px;
+      border: none;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(108,99,255,0.3);
+      text-decoration: none;
+      display: inline-block;
+      font-size: 1.1rem;
+    }
+    .btn-custom:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(108,99,255,0.4);
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .page-header h2 {
+        font-size: 2rem;
+      }
+    }
+
+    .pagination .page-item.active .page-link {
+      background-color: #6c63ff;
+      border-color: #6c63ff;
+      color: white;
+    }
+    .pagination .page-link {
+      color: #6c63ff;
+      font-weight: 500;
+    }
+    .pagination .page-link:hover {
+      background-color: #e7e3ff;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/login_home">🌿 GlowPath</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link active" href="/login_home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about_us">About Us</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link text-white dropdown-toggle" href="#" id="settingsDropdown" role="button" data-bs-toggle="dropdown">Settings</a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href='/profile_page'>Profile</a></li>
+              <li><a class="dropdown-item" href='/logout'>Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-container">
+    <div class="page-header">
+      <h2>✨ What Is Glass Skin and How Can You Get It?</h2>
+    </div>
+
+    <div class="section">
+      <p>“Glass skin” is a Korean skincare concept that describes skin so smooth, clear, and luminous that it looks like glass. It’s achieved by layering hydrating products, maintaining a consistent skincare routine, and focusing on achieving a naturally radiant, poreless look.</p>
+    </div>
+
+    <div class="section">
+      <h4>Why Is Glass Skin Trending?</h4>
+      <p>The popularity of glass skin coincides with the global love for Korean skincare. People adore its youthful, hydrated, and healthy glow — perfect for those who prefer a minimal, no-makeup look.</p>
+    </div>
+
+    <div class="section">
+      <h4>Key Characteristics of Glass Skin</h4>
+      <ul>
+        <li>✨ Smooth, poreless texture</li>
+        <li>🌈 Even and bright skin tone</li>
+        <li>💧 Hydrated, dewy glow</li>
+      </ul>
+      <p>Consistency is key — using hydrating and balancing products regularly helps you achieve this effect.</p>
+    </div>
+
+    <div class="section">
+      <h4>5 Steps to Achieve Glass Skin</h4>
+      <ul>
+        <li><strong>1. Double Cleanse:</strong> Start with an oil cleanser, then follow with a gentle foam cleanser.</li>
+        <li><strong>2. Tone:</strong> Use exfoliating and hydrating toners for smoother texture.</li>
+        <li><strong>3. Serums:</strong> Apply one for brightening (Vitamin C) and one for hydration (Hyaluronic Acid).</li>
+        <li><strong>4. Moisturize:</strong> Lock in all the hydration with a nourishing cream.</li>
+        <li><strong>5. Sunscreen (AM) or Sleep Mask (PM):</strong> Protect during the day and hydrate deeply at night.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h4>Tips for Different Skin Types</h4>
+      <ul>
+        <li><strong>Oily Skin:</strong> Lightweight, non-comedogenic moisturizers work best.</li>
+        <li><strong>Dry Skin:</strong> Try rich creams or slugging for extra moisture.</li>
+        <li><strong>Sensitive Skin:</strong> Stick to fragrance-free, gentle hydrators.</li>
+        <li><strong>Blemish-Prone Skin:</strong> Use non-clogging serums and spot treatments.</li>
+        <li><strong>Combination Skin:</strong> Hydrate dry areas, mattify oily ones.</li>
+      </ul>
+    </div>
+
+    <div class="action-button">
+      <a href="/skin_info" class="btn-custom">🔙 Back to Skin Profile</a>
+    </div>
+    <div class="pagination d-flex justify-content-end mt-4">
+      <nav>
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link" href="/skin1">2</a>
+          </li>
+          <li class="page-item active">
+            <a class="page-link" href="/skin3">next→</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
