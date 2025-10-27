@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlowPath - Double Cleansing</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #d2dada;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(90deg, #000 0%, #2d2d2d 100%) !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+    .nav-link:hover {
+      color: #ffc0cb !important;
+      transform: translateY(-1px);
+    }
+
+    /* Main Content */
+    .main-container {
+      padding: 100px 20px 50px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .page-header h2 {
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: #ff1493;
+      margin-bottom: 10px;
+    }
+    .page-header p {
+      color: black;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .section {
+      margin-bottom: 25px;
+    }
+    .section h4 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #2d2d2d;
+      margin-bottom: 10px;
+    }
+    .section p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #2d2d2d;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    ul li {
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    /* Pagination */
+    .pagination .page-item.active .page-link {
+      background-color: #6c63ff;
+      border-color: #6c63ff;
+      color: white;
+    }
+    .pagination .page-link {
+      color: #6c63ff;
+      font-weight: 500;
+    }
+    .pagination .page-link:hover {
+      background-color: #e7e3ff;
+    }
+
+    .pagination-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/login_home">🌿 GlowPath</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="/login_home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about_us">About Us</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link text-white dropdown-toggle" href="#" id="settingsDropdown" role="button" data-bs-toggle="dropdown">Settings</a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="/profile_page">Profile</a></li>
+              <li><a class="dropdown-item" href="/logout">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-container">
+    <div class="page-header">
+      <h2>🧴 Double Cleansing: What It Is and How to Do It Right</h2>
+    </div>
+
+    <div class="section">
+      <p>From glass skin to ice facials, Korean skincare trends are the gift that keeps on giving. While there are countless ones to try, we’ve always had a soft spot for double cleansing. As the name implies, this popular technique involves washing your face twice—first with an oil-based cleanser, then with a water-based cleanser—to help remove oil, makeup, and other debris. Knowing how to double cleanse correctly is essential if you’re embracing the trend, since overwashing your face can lead to dryness or dehydration.</p>
+
+      <p>If double cleansing intrigues you but you’re unsure where to start, we’ve got you covered. Ahead, we reveal the benefits of double cleansing and provide a step-by-step guide to this method. Plus, we’ll introduce you to some of our favorite double cleansing face products for skin that feels clean, but not stripped. Once you try this beloved K-beauty trend, you may never go back to your standard single cleanse.</p>
+    </div>
+
+    <div class="section">
+      <h4>What Is Double Cleansing?</h4>
+      <p>Double cleansing is a two-step cleansing method that typically consists of an oil-based cleanser followed by a water-based cleanser. The first cleanse helps dissolve makeup, oil, sunscreen, and other impurities, while the second cleanse removes residual debris to ensure a deep clean without stripping your skin.</p>
+    </div>
+
+    <div class="section">
+      <h4>What Are the Benefits of Double Cleansing?</h4>
+      <ul>
+        <li>Helps unclog pores</li>
+        <li>Reduces blackheads and prevents new spots</li>
+        <li>Removes sweat, dirt, and oil</li>
+        <li>Removes waterproof makeup and sunscreen</li>
+        <li>Suitable for most skin types</li>
+        <li>Prepares skin so serums and moisturizers absorb better</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h4>How to Double Cleanse</h4>
+      <ol>
+        <li><strong>Apply an oil-based cleanser</strong> — Use it on dry skin to remove makeup and sunscreen.</li>
+        <li><strong>Massage for one minute</strong> — Helps loosen debris and melt away makeup.</li>
+        <li><strong>Add water to emulsify</strong> — Massage with wet hands until the cleanser turns milky.</li>
+        <li><strong>Rinse thoroughly</strong> — Use lukewarm water to avoid dryness.</li>
+        <li><strong>Lather with a water-based cleanser</strong> — Removes leftover oil and impurities.</li>
+        <li><strong>Rinse again</strong> — Pat dry with a clean towel.</li>
+        <li><strong>Continue your skincare routine</strong> — Apply toner, serum, and moisturizer.</li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h4>Our Favorite Double Cleansing Products</h4>
+      <p><strong>Oil-Based Cleansers:</strong></p>
+      <ul>
+        <li>Aēsop Parsley Seed Facial Cleansing Oil</li>
+        <li>Garnier Erase It All Makeup Cleansing Balm Vitamin C</li>
+        <li>Kiehl’s Midnight Recovery Botanical Cleansing Oil</li>
+        <li>La Roche-Posay Lipikar AP+ Gentle Foaming Cleansing Oil</li>
+        <li>CeraVe Hydrating Foaming Oil Cleanser</li>
+      </ul>
+
+      <p><strong>Water-Based Cleansers:</strong></p>
+      <ul>
+        <li>La Roche-Posay Mela B3 Facial Gel Cleanser</li>
+        <li>IT Cosmetics Confidence in a Cleanser</li>
+        <li>Youth To The People Superfood Cleanser</li>
+        <li>SkinCeuticals LHA Cleansing Gel</li>
+        <li>Kiehl’s Ultra Facial Barrier-Hydrating Cleanser</li>
+        <li>CeraVe Balancing Air Foam Facial Cleanser</li>
+      </ul>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container">
+      <nav>
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link" href="/skin2">← Previous</a>
+          </li>
+          <li class="page-item active">
+            <a class="page-link" href="#">3</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
