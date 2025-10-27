@@ -125,8 +125,8 @@
           <li class="nav-item dropdown">
             <a class="nav-link text-white dropdown-toggle" href="#" id="settingsDropdown" role="button" data-bs-toggle="dropdown">Skin Info</a>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href='/oily_skin'>Oily Skin</a></li>
-              <li><a class="dropdown-item" href='/dry_skin'>Dry Skin</a></li>
+              <li><a class="dropdown-item" href='/skin1'>Skin Detox</a></li>
+              <li><a class="dropdown-item" href='/skin2'>Glass Skin</a></li>
             </ul>
           </li>
           <li class="nav-item">
@@ -236,7 +236,7 @@
     z-index: 1000;
     cursor: pointer;
 ">
-    <span>New skin info available!</span>
+    <span>New page available for you</span>
     <button id="popupCloseBtn" style="
         background: transparent;
         border: none;
@@ -255,7 +255,7 @@ const closeBtn = document.getElementById("popupCloseBtn");
 // Clicking the popup (except the ×) redirects
 popup.addEventListener("click", function(e) {
     if (e.target !== closeBtn) { // avoid triggering when clicking ×
-        window.location.href = "/oily_skin"; // redirect to oily skin page
+        window.location.href = "/skin1"; // redirect to oily skin page
     }
 });
 
